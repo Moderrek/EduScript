@@ -1,8 +1,10 @@
 package pl.moderr.eduscript.app;
 
 import pl.moderr.eduscript.EsScriptError;
+import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenCollection;
+import pl.moderr.eduscript.parser.EsParser;
 
 import static pl.moderr.eduscript.EduScript.*;
 
@@ -21,17 +23,21 @@ public class App {
         System.out.println("Hello EduScript!");
 
         try {
-            EsTokenCollection tokens = esTokenize(
-                """
-                    let a = 5;
-                    "Hello World!";
-                    1235;
-                    abc;"""
-            );
+            EsTokenCollection tokens = esTokenize("""
+                5 + 5 + 1;
+                2 + 2 + 1;
+                """);
             for (EsToken token : tokens) {
                 System.out.println(token);
             }
+            EsParser parser = new EsParser();
+            EsExpression[] ast = parser.parse(tokens);
+            System.out.println("Parsed " + ast.length + " expressions.");
+            for (EsExpression expr : ast) {
+                System.out.println(expr.evaluate());
+            }
         } catch (EsScriptError error) {
+            error.printStackTrace();
             System.out.println(error.toString());
         }
     }

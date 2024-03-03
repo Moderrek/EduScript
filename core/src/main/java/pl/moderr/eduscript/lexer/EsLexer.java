@@ -4,7 +4,59 @@ import org.jetbrains.annotations.NotNull;
 import pl.moderr.eduscript.EsPosition;
 import pl.moderr.eduscript.EsScriptError;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static pl.moderr.eduscript.lexer.EsTokenKinds.*;
+
 public class EsLexer implements LexerMixinUtils {
+
+  private static final Map<String, EsTokenKind> keywords;
+  private static final Map<Character, EsTokenKind> operators_short;
+  private static final Map<String, EsTokenKind> operators;
+
+  static {
+    operators_short = Map.of(
+        '(', PAREN_LEFT,
+        '{', CURLY_LEFT,
+        '}', CURLY_RIGHT,
+        '[', BRACKET_LEFT,
+        ']', BRACKET_RIGHT,
+        ')', PAREN_RIGHT,
+        ',', SEPARATOR_COMMA
+    );
+
+    operators = new HashMap<>();
+    operators.put("=", ASSIGN);
+    operators.put("+", PLUS);
+    operators.put("+=", PLUS_ASSIGN);
+    operators.put("-", MINUS);
+    operators.put("-=", MINUS_ASSIGN);
+    operators.put("*", MULTIPLY);
+    operators.put("*=", MULTIPLY_ASSIGN);
+    operators.put("/", DIVIDE);
+    operators.put("/=", DIVIDE_ASSIGN);
+    operators.put("==", EQUAL);
+    operators.put("!=", NOT_EQUAL);
+    operators.put("~=", NOT_EQUAL);
+    operators.put("~", NEGATE);
+    operators.put("!", NEGATE);
+    operators.put(">", GREATER);
+    operators.put("<", LESS);
+    operators.put(">=", GREATER_EQUAL);
+    operators.put("<=", LESS_EQUAL);
+    operators.put("%", MODULO);
+    operators.put("%=", MODULO_ASSIGN);
+
+    keywords = new HashMap<>();
+    keywords.put("zmien", LET);
+    keywords.put("stala", CONST);
+    keywords.put("prawda", TRUE);
+    keywords.put("falsz", FALSE);
+    keywords.put("jezeli", IF);
+    keywords.put("dopoki", WHILE);
+    keywords.put("dopasuj", MATCH);
+  }
 
   private EsTokenCollection tokens;
   private EsPosition position;
@@ -18,10 +70,10 @@ public class EsLexer implements LexerMixinUtils {
     while (!end()) {
       // Instruction end
       if (symbol().get() == ';') {
-        if (lastToken().isEmpty() || !lastToken().get().match(EsTokenKind.INSTRUCTION_END)) {
+        if (lastToken().isEmpty() || !lastToken().get().match(INSTRUCTION_END)) {
           EsPosition start = position.clone();
           move();
-          tokens.add(new EsToken(EsTokenKind.INSTRUCTION_END, ";", start,  position.clone()));
+          tokens.add(new EsToken(INSTRUCTION_END, ";", start,  position.clone()));
         }
         continue;
       }
@@ -54,6 +106,12 @@ public class EsLexer implements LexerMixinUtils {
         while (!end() && (letter().get() || digit().get())) buffer.append(symbolNext().get());
 
         String name = buffer.toString();
+        if (keywords.containsKey(name)) {
+          EsTokenKind kind = keywords.get(name);
+          EsToken token = new EsToken(kind, name, start, position.clone());
+          tokens.add(token);
+          continue;
+        }
         EsToken token = EsToken.identifier(name, start, position.clone());
         tokens.add(token);
         continue;
@@ -74,7 +132,7 @@ public class EsLexer implements LexerMixinUtils {
         }
 
         if (!foundEnd) {
-          throw new EsScriptError(getStart().getLine(), getStart().getCol(), "Cannot find end of string");
+          throw new EsScriptError(start().getLine(), start().getCol(), "Cannot find end of string");
         }
 
         String string = buffer.toString();
@@ -83,12 +141,29 @@ public class EsLexer implements LexerMixinUtils {
         continue;
       }
 
-      if (symbol().get() == '=') {
-        move();
+      if (operators_short.containsKey(symbol().get())) {
+        EsPosition start = position.clone();
+        char symbol = symbolNext().get();
+        EsTokenKind kind = operators_short.get(symbol);
+        EsToken token = new EsToken(kind, String.valueOf(symbol), start, position.clone());
+        tokens.add(token);
+        continue;
+      }
+      // others
+      StringBuilder buffer = new StringBuilder();
+      EsPosition start = position.clone();
+      while (!end() && !whitespace().get() && !digit().get()) {
+        buffer.append(symbolNext().get());
+      }
+      String symbol = buffer.toString();
+      if (operators.containsKey(symbol)) {
+        EsTokenKind kind = operators.get(symbol);
+        EsToken token = new EsToken(kind, symbol, start, position.clone());
+        tokens.add(token);
         continue;
       }
 
-      throw new EsScriptError(position.line(), position.col(), "Unknown symbol '" + symbol().get() + "'");
+      throw new EsScriptError(position.line(), position.col(), "Unknown '" + symbol + "'");
     }
 
     return tokens;
@@ -105,7 +180,7 @@ public class EsLexer implements LexerMixinUtils {
   }
 
   @Override
-  public @NotNull EsPosition getStart() {
+  public @NotNull EsPosition start() {
     return position;
   }
 

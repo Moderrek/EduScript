@@ -18,7 +18,7 @@ public interface LexerMixinUtils extends Positionable {
   }
 
   default int pos() {
-    return getStart().index();
+    return start().index();
   }
 
   default Optional<Character> symbol() {
@@ -38,7 +38,7 @@ public interface LexerMixinUtils extends Positionable {
   }
 
   default boolean end() {
-    return getStart().index() >= length();
+    return start().index() >= length();
   }
 
   default Optional<Boolean> whitespace() {
@@ -59,7 +59,7 @@ public interface LexerMixinUtils extends Positionable {
   default boolean move() {
     Optional<Character> symbol = symbol();
     if (symbol.isEmpty()) return false;
-    getStart().move(symbol.get());
+    start().move(symbol.get());
     return true;
   }
 

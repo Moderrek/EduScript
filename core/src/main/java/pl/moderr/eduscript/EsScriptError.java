@@ -28,12 +28,12 @@ public class EsScriptError extends RuntimeException implements Positionable {
   }
 
   @Override
-  public @NotNull EsPosition getStart() {
+  public @NotNull EsPosition start() {
     return position;
   }
 
   @Override
   public String toString() {
-    return "EsError | " + getStart().toString() + ": " + getMessage();
+    return "EsError | " + start().toString() + ": " + getMessage();
   }
 }

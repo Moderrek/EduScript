@@ -4,12 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import pl.moderr.eduscript.EsPosition;
 import pl.moderr.eduscript.Positionable;
 
-public final class EsToken implements Positionable {
-
-  private final EsTokenKind kind;
-  private final String value;
-  private final EsPosition start;
-  private final EsPosition end;
+public record EsToken(EsTokenKind kind, String value, EsPosition start, EsPosition end) implements Positionable {
 
   public EsToken(EsTokenKind kind, @NotNull String value, EsPosition start, EsPosition end) {
     this.kind = kind;
@@ -19,19 +14,15 @@ public final class EsToken implements Positionable {
   }
 
   public static @NotNull EsToken integer(@NotNull String value, @NotNull EsPosition start, @NotNull EsPosition end) {
-    return new EsToken(EsTokenKind.INTEGER, value, start, end);
+    return new EsToken(EsTokenKinds.INTEGER, value, start, end);
   }
 
   public static @NotNull EsToken string(@NotNull String value, @NotNull EsPosition start, @NotNull EsPosition end) {
-    return new EsToken(EsTokenKind.STRING, value, start, end);
+    return new EsToken(EsTokenKinds.STRING, value, start, end);
   }
 
   public static @NotNull EsToken identifier(@NotNull String value, @NotNull EsPosition start, @NotNull EsPosition end) {
-    return new EsToken(EsTokenKind.IDENTIFIER, value, start, end);
-  }
-
-  public EsTokenKind getKind() {
-    return kind;
+    return new EsToken(EsTokenKinds.IDENTIFIER, value, start, end);
   }
 
   public boolean match(@NotNull EsTokenKind other) {
@@ -47,20 +38,12 @@ public final class EsToken implements Positionable {
   }
 
   @Override
-  public @NotNull EsPosition getStart() {
+  public @NotNull EsPosition start() {
     return start;
-  }
-
-  public EsPosition getEnd() {
-    return end;
-  }
-
-  public String getValue() {
-    return value;
   }
 
   @Override
   public @NotNull String toString() {
-    return getKind() + " {" + getValue() + "} " + getStart() + "->" + getEnd();
+    return kind() + " {" + value() + "} " + start() + "->" + end();
   }
 }

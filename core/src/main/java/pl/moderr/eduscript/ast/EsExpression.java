@@ -1,6 +1,9 @@
 package pl.moderr.eduscript.ast;
 
-public class EsExpression implements Cloneable {
+public abstract class EsExpression implements Cloneable {
+
+  public abstract EsValue<?> evaluate();
+
   @Override
   public EsExpression clone() {
     try {

@@ -9,10 +9,6 @@ public interface ParserMixinUtils {
   int pos();
   int addPos(int n);
 
-  default EsToken token() {
-    return tokens().get(pos());
-  }
-
   default void move() {
     addPos(1);
   }
