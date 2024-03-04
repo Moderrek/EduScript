@@ -24,12 +24,11 @@ public class App {
 
         try {
             EsTokenCollection tokens = esTokenize("""
-                5 + 5 + 1;
-                2 + 2 + 1;
-                """);
+                zmien a = 2 + 2 * 2;""");
             for (EsToken token : tokens) {
                 System.out.println(token);
             }
+            System.out.println("Tokenized " + tokens.size() + " tokens.");
             EsParser parser = new EsParser();
             EsExpression[] ast = parser.parse(tokens);
             System.out.println("Parsed " + ast.length + " expressions.");

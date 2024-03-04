@@ -16,8 +16,10 @@ public final class EsTokenKinds {
   public static final EsTokenKind BRACKET_LEFT = new EsTokenKind("bracket left", false);
   public static final EsTokenKind BRACKET_RIGHT = new EsTokenKind("bracket right", false);
   public static final EsTokenKind SEPARATOR_COMMA = new EsTokenKind("separator", false);
-  public static final EsTokenKind PLUS = new EsTokenKind("plus", true);
-  public static final EsTokenKind MINUS = new EsTokenKind("minus", true);
+  public static final EsTokenKind PLUS = new EsTokenKind("plus", true)
+      .operatorPrecedence(1);
+  public static final EsTokenKind MINUS = new EsTokenKind("minus", true)
+      .operatorPrecedence(1);
   public static final EsTokenKind TRUE = new EsTokenKind("true", false);
   public static final EsTokenKind ASSIGN = new EsTokenKind("assign", false);
   public static final EsTokenKind LET = new EsTokenKind("let", false);
@@ -27,11 +29,13 @@ public final class EsTokenKinds {
   public static final EsTokenKind WHILE = new EsTokenKind("while", false);
   public static final EsTokenKind MATCH = new EsTokenKind("match", false);
   public static final EsTokenKind PLUS_ASSIGN = new EsTokenKind("plus assign", true);
-  public static final EsTokenKind MULTIPLY = new EsTokenKind("multiply", true);
+  public static final EsTokenKind MULTIPLY = new EsTokenKind("multiply", true)
+      .operatorPrecedence(2);
   public static final EsTokenKind MULTIPLY_ASSIGN = new EsTokenKind("multiply assign", true);
   public static final EsTokenKind DIVIDE = new EsTokenKind("divide", true);
   public static final EsTokenKind DIVIDE_ASSIGN = new EsTokenKind("divide assign", false);
-  public static final EsTokenKind EQUAL = new EsTokenKind("equal", false);
+  public static final EsTokenKind EQUAL = new EsTokenKind("equal", false)
+      .operatorPrecedence(0);
   public static final EsTokenKind NOT_EQUAL = new EsTokenKind("not equal", true);
   public static final EsTokenKind NEGATE = new EsTokenKind("negate", false);
   public static final EsTokenKind GREATER = new EsTokenKind("negate", true);

@@ -43,4 +43,15 @@ public class EsInt extends EsValue<Integer> {
     }
     throw new UnsupportedOperationException();
   }
+
+  @Override
+  public @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> other) {
+    if (other.isType(EsInt.class)) {
+      EsValue<Integer> right = other.cast(EsInt.class);
+      if (right == null) throw new EsScriptError("Cannot cast!");
+      int result = value * right.unwrap();
+      return new EsInt(result);
+    }
+    throw new UnsupportedOperationException();
+  }
 }

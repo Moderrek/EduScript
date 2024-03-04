@@ -11,6 +11,7 @@ public abstract class EsValue<V> extends EsExpression {
   public abstract V unwrap();
 
   public abstract @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other);
+  public abstract @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> right);
 
   public <W, T extends EsValue<W>> @Nullable T cast(Class<T> to) {
     if (getClass() == to) return to.cast(this);
@@ -23,7 +24,6 @@ public abstract class EsValue<V> extends EsExpression {
     EsValue<?> casted = cast(type);
     return casted != null;
   }
-
 //  public static <T extends EsValue<?>> @NotNull T Cast(@NotNull EsValue<?> value, @NotNull Class<T> type) {
 //    T casted = value.cast(type);
 //    if (casted == null)
@@ -36,6 +36,7 @@ public abstract class EsValue<V> extends EsExpression {
 //    if (value.getClass().equals(type)) return true;
 //    T casted = value.cast(type);
 //    return casted != null;
+
 //  }
 
   @Override

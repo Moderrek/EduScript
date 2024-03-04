@@ -27,6 +27,9 @@ public class EsOperatorStatement extends EsExpression {
     if (operator == PLUS) {
       return left.operatorPlus(right);
     }
+    if (operator == MULTIPLY) {
+      return left.operatorMultiply(right);
+    }
 
     throw new UnsupportedOperationException();
   }
