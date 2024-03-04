@@ -6,6 +6,7 @@ import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenKind;
+import pl.moderr.eduscript.lexer.EsTokenKinds;
 import pl.moderr.eduscript.statements.EsLetStatement;
 import pl.moderr.eduscript.statements.EsOperatorStatement;
 import pl.moderr.eduscript.types.EsInt;
@@ -23,7 +24,7 @@ public class EsParser extends EsParserBase {
     } while (!(pos() >= tokens().size()));
   }
 
-  private EsExpression expression() {
+  private EsExpression expression(int minPrecedence) {
     EsExpression lhs;
     if (matchStay(MINUS) || matchStay(PLUS)) {
       lhs = new EsInt();
@@ -32,12 +33,22 @@ public class EsParser extends EsParserBase {
     }
 
     while (token().isPresent() && token().get().kind().isOperator()) {
-      EsTokenKind operator = tokenNext().get().kind();
-      EsExpression rhs = value();
-      lhs = new EsOperatorStatement(lhs, operator, rhs);
+      if (token().isEmpty()) break;
+      EsToken operator = token().get();
+      int operatorPrecedence = operator.kind().getOperatorPrecedence();
+      if (operatorPrecedence < 0) break;
+      if (operatorPrecedence < minPrecedence) break;
+      nextToken();
+      int nextMinPrecedence = operatorPrecedence + 1;
+      EsExpression rhs = expression(nextMinPrecedence);
+      lhs = new EsOperatorStatement(lhs, operator.kind(), rhs);
     }
 
     return lhs;
+  }
+
+  private EsExpression expression() {
+    return expression(0);
   }
 
   @Contract(" -> new")
