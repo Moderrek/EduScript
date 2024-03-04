@@ -1,11 +1,13 @@
 package pl.moderr.eduscript.statements;
 
+import org.jetbrains.annotations.NotNull;
 import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.lexer.EsTokenKind;
-import pl.moderr.eduscript.lexer.EsTokenKinds;
+import pl.moderr.eduscript.vm.EsScript;
 
-import static pl.moderr.eduscript.lexer.EsTokenKinds.*;
+import static pl.moderr.eduscript.lexer.EsTokenKinds.MULTIPLY;
+import static pl.moderr.eduscript.lexer.EsTokenKinds.PLUS;
 
 public class EsOperatorStatement extends EsExpression {
 
@@ -20,9 +22,9 @@ public class EsOperatorStatement extends EsExpression {
   }
 
   @Override
-  public EsValue<?> evaluate() {
-    EsValue<?> left = expr_left.evaluate();
-    EsValue<?> right = expr_right.evaluate();
+  public EsValue<?> evaluate(@NotNull EsScript script) {
+    EsValue<?> left = expr_left.evaluate(script);
+    EsValue<?> right = expr_right.evaluate(script);
 
     if (operator == PLUS) {
       return left.operatorPlus(right);

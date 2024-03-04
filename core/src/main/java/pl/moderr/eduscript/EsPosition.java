@@ -26,20 +26,20 @@ public class EsPosition implements Cloneable {
     return col;
   }
 
-  public int getRow() {
-    return row;
-  }
-
-  public int getLine() {
-    return row;
-  }
-
   public void setCol(int col) {
     this.col = col;
   }
 
+  public int getRow() {
+    return row;
+  }
+
   public void setRow(int row) {
     this.row = row;
+  }
+
+  public int getLine() {
+    return row;
   }
 
   public void setLine(int line) {

@@ -5,10 +5,12 @@ import pl.moderr.eduscript.ast.SimpleEsType;
 
 public final class EsTypes {
 
+  public static final EsType INT = new SimpleEsType("calk");
+  public static final EsType BOOL = new SimpleEsType("logiczna");
+  public static final EsType STR = new SimpleEsType("tekst");
+  public static final EsType VAR = new SimpleEsType("wartosc");
   private EsTypes() {
 
   }
-
-  public static final EsType INT = new SimpleEsType("calk");
 
 }

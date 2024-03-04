@@ -1,12 +1,13 @@
 package pl.moderr.eduscript.types;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsType;
 import pl.moderr.eduscript.ast.EsValue;
 
 public class EsInt extends EsValue<Integer> {
+
+  private final int value;
 
   public EsInt() {
     value = 0;
@@ -15,8 +16,6 @@ public class EsInt extends EsValue<Integer> {
   public EsInt(int value) {
     this.value = value;
   }
-
-  private final int value;
 
   @Override
   public EsType getType() {

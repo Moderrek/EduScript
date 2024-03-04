@@ -7,6 +7,7 @@ import java.util.Optional;
 public interface LexerMixinUtils extends Positionable {
 
   EsTokenCollection tokens();
+
   String input();
 
   default int length() {

@@ -5,21 +5,16 @@ import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.vm.EsScript;
 
-public class EsLetStatement extends EsExpression {
+public class EsReturnStatement extends EsExpression {
 
-  private final String id;
   private final EsExpression expr;
 
-  public EsLetStatement(String identifier, EsExpression value) {
-    this.id = identifier;
-    this.expr = value;
+  public EsReturnStatement(EsExpression expr) {
+    this.expr = expr;
   }
 
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {
-    EsValue<?> value = expr.evaluate(script);
-    script.setVariable(id, value);
-    return script.getVariable(id).get();
+    return expr.evaluate(script);
   }
-
 }

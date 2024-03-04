@@ -2,16 +2,23 @@ package pl.moderr.eduscript.ast;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pl.moderr.eduscript.EsScriptError;
+import pl.moderr.eduscript.vm.EsScript;
 
 public abstract class EsValue<V> extends EsExpression {
 
   public abstract EsType getType();
+
   public abstract String asString();
+
   public abstract V unwrap();
 
-  public abstract @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other);
-  public abstract @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> right);
+  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
+    throw new UnsupportedOperationException();
+  }
+
+  public @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> right) {
+    throw new UnsupportedOperationException();
+  }
 
   public <W, T extends EsValue<W>> @Nullable T cast(Class<T> to) {
     if (getClass() == to) return to.cast(this);
@@ -41,11 +48,12 @@ public abstract class EsValue<V> extends EsExpression {
 
   @Override
   public String toString() {
-    return asString();
+    return getType().getName() + "[" + asString() + "]";
   }
 
   @Override
-  public EsValue<?> evaluate() {
+  public EsValue<?> evaluate(@NotNull EsScript script) {
     return this;
   }
+
 }

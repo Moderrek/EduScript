@@ -56,6 +56,7 @@ public class EsLexer implements LexerMixinUtils {
     keywords.put("jezeli", IF);
     keywords.put("dopoki", WHILE);
     keywords.put("dopasuj", MATCH);
+    keywords.put("zwroc", RETURN);
   }
 
   private EsTokenCollection tokens;
@@ -73,7 +74,7 @@ public class EsLexer implements LexerMixinUtils {
         if (lastToken().isEmpty() || !lastToken().get().match(INSTRUCTION_END)) {
           EsPosition start = position.clone();
           move();
-          tokens.add(new EsToken(INSTRUCTION_END, ";", start,  position.clone()));
+          tokens.add(new EsToken(INSTRUCTION_END, ";", start, position.clone()));
         }
         continue;
       }

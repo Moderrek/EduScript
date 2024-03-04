@@ -2,8 +2,6 @@ package pl.moderr.eduscript.lexer;
 
 public final class EsTokenKinds {
 
-  private EsTokenKinds() { }
-
   public static final EsTokenKind INTEGER = new EsTokenKind("calk", false);
   public static final EsTokenKind KEYWORD = new EsTokenKind("keyword", false);
   public static final EsTokenKind IDENTIFIER = new EsTokenKind("identifier", false);
@@ -45,6 +43,8 @@ public final class EsTokenKinds {
   public static final EsTokenKind MODULO = new EsTokenKind("modulo", true);
   public static final EsTokenKind MODULO_ASSIGN = new EsTokenKind("modulo assign", true);
   public static final EsTokenKind MINUS_ASSIGN = new EsTokenKind("minus assign", true);
-
+  public static final EsTokenKind RETURN = new EsTokenKind("zwroc", false);
+  private EsTokenKinds() {
+  }
 
 }
