@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.types.EsBool;
+import pl.moderr.eduscript.types.EsFloat;
 import pl.moderr.eduscript.types.EsInt;
 import pl.moderr.eduscript.types.EsStr;
 
@@ -27,6 +28,10 @@ public class EduScriptData {
     return Optional.ofNullable(variables.get(identifier));
   }
 
+  public void setVariable(@NotNull String identifier, int value) {
+    setVariable(identifier, new EsInt(value));
+  }
+
   public void setVariable(@NotNull String identifier, @Nullable EsValue<?> value) {
     if (value == null) {
       variables.remove(identifier);
@@ -35,16 +40,16 @@ public class EduScriptData {
     variables.put(identifier, value);
   }
 
-  public void setVariable(@NotNull String identifier, int value) {
-    setVariable(identifier, new EsInt(value));
-  }
-
   public void setVariable(@NotNull String identifier, String value) {
     setVariable(identifier, new EsStr(value));
   }
 
   public void setVariable(@NotNull String identifier, boolean value) {
     setVariable(identifier, new EsBool(value));
+  }
+
+  public void setVariable(@NotNull String identifier, float value) {
+    setVariable(identifier, new EsFloat(value));
   }
 
 }
