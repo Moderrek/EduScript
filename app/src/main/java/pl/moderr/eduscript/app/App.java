@@ -15,10 +15,6 @@ public class App {
     }
   }
 
-  public String getGreeting() {
-    return "Hello World!";
-  }
-
   public void run() {
     // Create environment for running scripts.
     EsInstance eduscript = EsInstance.create();
@@ -38,6 +34,10 @@ public class App {
     System.out.println(script.getVariable("d").get().unwrap().equals(6));
     // Remove script data.
     script.remove();
+  }
+
+  public String getGreeting() {
+    return "Hello World!";
   }
 
 }

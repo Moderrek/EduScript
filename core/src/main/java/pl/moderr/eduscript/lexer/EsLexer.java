@@ -171,6 +171,11 @@ public class EsLexer implements LexerMixinUtils {
   }
 
   @Override
+  public @NotNull EsPosition start() {
+    return position;
+  }
+
+  @Override
   public EsTokenCollection tokens() {
     return tokens;
   }
@@ -178,11 +183,6 @@ public class EsLexer implements LexerMixinUtils {
   @Override
   public String input() {
     return input;
-  }
-
-  @Override
-  public @NotNull EsPosition start() {
-    return position;
   }
 
 }

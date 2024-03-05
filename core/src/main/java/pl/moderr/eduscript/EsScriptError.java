@@ -5,8 +5,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * EsScriptError is the parent class of any exception.<br>
  * thrown when an error is encountered in EduScript code.
- * @since 1.0
+ *
  * @author Tymon Woźniak
+ * @since 1.0
  */
 public class EsScriptError extends RuntimeException implements Positionable {
 
@@ -28,12 +29,12 @@ public class EsScriptError extends RuntimeException implements Positionable {
   }
 
   @Override
-  public @NotNull EsPosition start() {
-    return position;
+  public String toString() {
+    return "EsError | " + start().toString() + ": " + getMessage();
   }
 
   @Override
-  public String toString() {
-    return "EsError | " + start().toString() + ": " + getMessage();
+  public @NotNull EsPosition start() {
+    return position;
   }
 }

@@ -17,6 +17,11 @@ public class EsVar extends EsValue<String> {
   }
 
   @Override
+  public String unwrap() {
+    return identifier;
+  }
+
+  @Override
   public EsType getType() {
     return EsTypes.VAR;
   }
@@ -33,10 +38,5 @@ public class EsVar extends EsValue<String> {
       throw new EsScriptError("Undefined variable '" + identifier + "'");
     }
     return variable.get();
-  }
-
-  @Override
-  public String unwrap() {
-    return identifier;
   }
 }

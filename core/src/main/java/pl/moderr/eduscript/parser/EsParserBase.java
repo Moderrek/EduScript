@@ -37,17 +37,34 @@ public abstract class EsParserBase implements ParserMixinUtils {
     expressions.add(expression);
   }
 
+  public Optional<EsToken> nextToken() {
+    pos += 1;
+    return token();
+  }
+
   public Optional<EsToken> token() {
     if (!hasToken(pos)) return Optional.empty();
     return Optional.of(tokens.get(pos));
   }
 
-  public boolean hasToken() {
-    return hasToken(pos);
-  }
-
   public boolean hasToken(int pos) {
     return !(pos < 0 || pos >= tokens.size());
+  }
+
+  public Optional<EsToken> lookTokenBack(int back) {
+    return lookTokenAhead(back * -1);
+  }
+
+  public Optional<EsToken> lookTokenAhead(int ahead) {
+    int index = pos + ahead;
+    if (!hasToken(index)) return Optional.empty();
+    return Optional.of(tokens.get(index));
+  }
+
+  public boolean match(EsTokenKind kind) {
+    Optional<EsToken> token = tokenNext();
+    return token.map(esToken -> esToken.match(kind))
+        .orElse(false);
   }
 
   public Optional<EsToken> tokenNext() {
@@ -57,25 +74,8 @@ public abstract class EsParserBase implements ParserMixinUtils {
     return Optional.of(token);
   }
 
-  public Optional<EsToken> nextToken() {
-    pos += 1;
-    return token();
-  }
-
-  public Optional<EsToken> lookTokenAhead(int ahead) {
-    int index = pos + ahead;
-    if (!hasToken(index)) return Optional.empty();
-    return Optional.of(tokens.get(index));
-  }
-
-  public Optional<EsToken> lookTokenBack(int back) {
-    return lookTokenAhead(back * -1);
-  }
-
-  public boolean match(EsTokenKind kind) {
-    Optional<EsToken> token = tokenNext();
-    return token.map(esToken -> esToken.match(kind))
-        .orElse(false);
+  public boolean hasToken() {
+    return hasToken(pos);
   }
 
   public boolean matchStay(EsTokenKind kind) {

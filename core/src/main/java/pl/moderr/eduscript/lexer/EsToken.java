@@ -29,21 +29,21 @@ public record EsToken(EsTokenKind kind, String value, EsPosition start, EsPositi
     return token.match(other);
   }
 
-  public boolean match(@NotNull EsTokenKind other) {
-    return this.kind == other;
-  }
-
   public boolean match(@NotNull EsToken token) {
     return this.kind == token.kind;
   }
 
-  @Override
-  public @NotNull EsPosition start() {
-    return start;
+  public boolean match(@NotNull EsTokenKind other) {
+    return this.kind == other;
   }
 
   @Override
   public @NotNull String toString() {
     return kind() + " {" + value() + "} " + start() + "->" + end();
+  }
+
+  @Override
+  public @NotNull EsPosition start() {
+    return start;
   }
 }

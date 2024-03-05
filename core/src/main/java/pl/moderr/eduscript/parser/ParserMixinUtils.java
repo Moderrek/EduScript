@@ -4,15 +4,11 @@ import pl.moderr.eduscript.lexer.EsTokenCollection;
 
 public interface ParserMixinUtils {
 
-  EsTokenCollection tokens();
-
-  int pos();
-
-  int addPos(int n);
-
   default void move() {
     addPos(1);
   }
+
+  int addPos(int n);
 
   default void move(int n) {
     addPos(n);
@@ -21,5 +17,9 @@ public interface ParserMixinUtils {
   default boolean end() {
     return pos() <= tokens().size();
   }
+
+  int pos();
+
+  EsTokenCollection tokens();
 
 }

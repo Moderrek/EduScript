@@ -16,17 +16,17 @@ public class EsStr extends EsValue<String> {
   }
 
   @Override
+  public String unwrap() {
+    return value;
+  }
+
+  @Override
   public EsType getType() {
     return EsTypes.STR;
   }
 
   @Override
   public String asString() {
-    return value;
-  }
-
-  @Override
-  public String unwrap() {
     return value;
   }
 

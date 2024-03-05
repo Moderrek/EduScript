@@ -93,10 +93,9 @@ public class EsPosition implements Cloneable {
     return raw;
   }
 
-  @Contract(pure = true)
   @Override
-  public @NotNull String toString() {
-    return (this.row + 1) + ":" + (this.col + 1);
+  public int hashCode() {
+    return Objects.hash(row, col);
   }
 
   @Override
@@ -108,16 +107,17 @@ public class EsPosition implements Cloneable {
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(row, col);
-  }
-
-  @Override
   public EsPosition clone() {
     try {
       return (EsPosition) super.clone();
     } catch (CloneNotSupportedException e) {
       throw new AssertionError();
     }
+  }
+
+  @Contract(pure = true)
+  @Override
+  public @NotNull String toString() {
+    return (this.row + 1) + ":" + (this.col + 1);
   }
 }

@@ -25,12 +25,6 @@ public class EsInstance {
     return new EsInstance();
   }
 
-  public EsScript createScript() {
-    EsScript script = new EsScript(this, UUID.randomUUID());
-    scripts.put(script, new EduScriptData());
-    return script;
-  }
-
   public void removeScript(EsScript script) {
     scripts.remove(script);
   }
@@ -71,6 +65,12 @@ public class EsInstance {
     for (EsExpression stmt : statements) {
       stmt.evaluate(script);
     }
+    return script;
+  }
+
+  public EsScript createScript() {
+    EsScript script = new EsScript(this, UUID.randomUUID());
+    scripts.put(script, new EduScriptData());
     return script;
   }
 

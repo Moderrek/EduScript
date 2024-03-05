@@ -44,6 +44,7 @@ public final class EsTokenKinds {
   public static final EsTokenKind MODULO_ASSIGN = new EsTokenKind("modulo assign", true);
   public static final EsTokenKind MINUS_ASSIGN = new EsTokenKind("minus assign", true);
   public static final EsTokenKind RETURN = new EsTokenKind("zwroc", false);
+
   private EsTokenKinds() {
   }
 

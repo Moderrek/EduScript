@@ -21,16 +21,12 @@ public class EsScript {
     return id;
   }
 
-  public EsInstance getVirtualMachine() {
-    return vm;
+  public Map<String, EsValue<?>> getVariables() {
+    return data().getVariables();
   }
 
   public EduScriptData data() {
     return vm.scripts.get(this);
-  }
-
-  public Map<String, EsValue<?>> getVariables() {
-    return data().getVariables();
   }
 
   public Set<String> getDeclaredNames() {
@@ -41,6 +37,10 @@ public class EsScript {
     Optional<EsValue<?>> local = data().getVariable(identifier);
     if (local.isPresent()) return local;
     return getVirtualMachine().global.getVariable(identifier);
+  }
+
+  public EsInstance getVirtualMachine() {
+    return vm;
   }
 
   public void setVariable(@NotNull String identifier, @Nullable EsValue<?> value) {
@@ -64,16 +64,16 @@ public class EsScript {
   }
 
   @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  @Override
   public boolean equals(Object object) {
     if (this == object) return true;
     if (object == null || getClass() != object.getClass()) return false;
     EsScript esScript = (EsScript) object;
     return Objects.equals(id, esScript.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
   }
 
 }

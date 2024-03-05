@@ -6,10 +6,6 @@ import pl.moderr.eduscript.vm.EsScript;
 
 public abstract class EsValue<V> extends EsExpression {
 
-  public abstract EsType getType();
-
-  public abstract String asString();
-
   public abstract V unwrap();
 
   public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
@@ -20,17 +16,24 @@ public abstract class EsValue<V> extends EsExpression {
     throw new UnsupportedOperationException();
   }
 
-  public <W, T extends EsValue<W>> @Nullable T cast(Class<T> to) {
-    if (getClass() == to) return to.cast(this);
-    return null;
-  }
-
   public <T extends EsValue> boolean isType(@NotNull Class<T> type) {
     if (type == EsValue.class) return true;
     if (getClass().equals(type)) return true;
     EsValue<?> casted = cast(type);
     return casted != null;
   }
+
+  public <W, T extends EsValue<W>> @Nullable T cast(Class<T> to) {
+    if (getClass() == to) return to.cast(this);
+    return null;
+  }
+
+  @Override
+  public String toString() {
+    return getType().getName() + "[" + asString() + "]";
+  }
+
+  public abstract EsType getType();
 //  public static <T extends EsValue<?>> @NotNull T Cast(@NotNull EsValue<?> value, @NotNull Class<T> type) {
 //    T casted = value.cast(type);
 //    if (casted == null)
@@ -46,10 +49,7 @@ public abstract class EsValue<V> extends EsExpression {
 
 //  }
 
-  @Override
-  public String toString() {
-    return getType().getName() + "[" + asString() + "]";
-  }
+  public abstract String asString();
 
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {
