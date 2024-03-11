@@ -104,4 +104,16 @@ public class EsParser extends EsParserBase {
     // unknown
     throw new EsScriptError(token.start().line(), token.start().col(), "Invalid statement");
   }
+
+//  private EsExpression fnCall() {
+//    EsToken name = consume(IDENTIFIER);
+//    boolean haveArgs = false;
+//    consume(PAREN_LEFT);
+//    do {
+//      haveArgs = true;
+//      EsExpression value = expression();
+//    } while (match(SEPARATOR_COMMA));
+//    consume(PAREN_RIGHT);
+//
+//  }
 }

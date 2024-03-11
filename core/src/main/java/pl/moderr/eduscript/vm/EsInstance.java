@@ -9,16 +9,18 @@ import pl.moderr.eduscript.parser.EsParser;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public class EsInstance {
 
+  public Consumer<String> out;
   final EduScriptData global;
   final Map<EsScript, EduScriptData> scripts;
 
   public EsInstance() {
-    this.global = new EduScriptData();
-    global.setVariable("pi", 3);
     this.scripts = new ConcurrentHashMap<>();
+    this.global = new EduScriptData();
+    global.setVariable("pi", 3.14f);
   }
 
   public static @NotNull EsInstance create() {

@@ -19,6 +19,7 @@ public class EsLetStatement extends EsExpression {
   public EsValue<?> evaluate(@NotNull EsScript script) {
     EsValue<?> value = expr.evaluate(script);
     script.setVariable(id, value);
+    script.getVirtualMachine().out.accept(id + "=" + value);
     return script.getVariable(id).get();
   }
 
