@@ -1,8 +1,7 @@
 package pl.moderr.eduscript.parser;
 
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsPosition;
-import pl.moderr.eduscript.EsScriptError;
+import pl.moderr.eduscript.EsParserError;
 import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenCollection;
@@ -96,15 +95,12 @@ public abstract class EsParserBase implements ParserMixinUtils {
   public EsToken consume(EsTokenKind kind) {
     Optional<EsToken> token = tokenNext();
     if (token.isEmpty())
-      throw new EsScriptError("expected " + kind);
-    if (!token.get().match(kind)) {
-      EsPosition start = token.get().start();
-      throw new EsScriptError(
-          start.line(),
-          start.col(),
-          "expected " + kind + ", got " + token.get().kind()
+      throw new EsParserError("Spodziewano się '" + kind + "'.");
+    if (!token.get().match(kind))
+      throw new EsParserError(
+          token.get().start(),
+          "Spodziewano się '" + kind + "', otrzymano '" + token.get().kind() + "'."
       );
-    }
     return token.get();
   }
 
