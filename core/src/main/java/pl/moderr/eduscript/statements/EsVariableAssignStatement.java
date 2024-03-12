@@ -23,10 +23,10 @@ public class EsVariableAssignStatement extends EsExpression {
   public EsValue<?> evaluate(@NotNull EsScript script) {
     String name = ident.value();
     if (!script.hasDefinedVariable(name))
-      throw new EsScriptError(ident.start(), "Variable '" + name + "' is not defined.");
+      throw new EsScriptError(ident.start(), "Zmienna '" + name + "' jest niezdefiniowana.");
     EsVariable variable = script.data().getVariable(name).get();
     if (variable.isConst())
-      throw new EsScriptError(ident.start(), "Variable '" + name + "' is const.");
+      throw new EsScriptError(ident.start(), "Nie można zmodyfikować '" + name + "', ponieważ jest stałą.");
 
     EsValue<?> value = expr.evaluate(script);
     variable.set(value);

@@ -3,7 +3,7 @@ package pl.moderr.eduscript.statements;
 import org.jetbrains.annotations.NotNull;
 import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.ast.EsValue;
-import pl.moderr.eduscript.types.EsStr;
+import pl.moderr.eduscript.types.EsUnit;
 import pl.moderr.eduscript.vm.EsScript;
 
 public class EsBlockExpression extends EsExpression {
@@ -22,6 +22,6 @@ public class EsBlockExpression extends EsExpression {
       }
       expression.evaluate(script);
     }
-    return new EsStr("None");
+    return EsUnit.get();
   }
 }

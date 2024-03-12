@@ -35,9 +35,8 @@ public class EsVar extends EsValue<String> {
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {
     Optional<EsVariable> variable = script.getVariable(identifier);
-    if (variable.isEmpty()) {
-      throw new EsScriptError("Undefined variable '" + identifier + "'");
-    }
+    if (variable.isEmpty())
+      throw new EsScriptError("Niezdefiniowana wartość '" + identifier + "'.");
     return variable.get().get();
   }
 }

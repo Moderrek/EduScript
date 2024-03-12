@@ -26,7 +26,7 @@ public class EsInt extends EsValue<Integer> {
   public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
     if (other.isType(EsInt.class)) {
       EsValue<Integer> right = other.cast(EsInt.class);
-      if (right == null) throw new EsScriptError("Cannot cast!");
+      if (right == null) throw new EsScriptError("Nie można rzutować typu!");
       int result = value + right.unwrap();
       return new EsInt(result);
     }
@@ -37,7 +37,7 @@ public class EsInt extends EsValue<Integer> {
   public @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> other) {
     if (other.isType(EsInt.class)) {
       EsValue<Integer> right = other.cast(EsInt.class);
-      if (right == null) throw new EsScriptError("Cannot cast!");
+      if (right == null) throw new EsScriptError("Nie można rzutować typu!");
       int result = value * right.unwrap();
       return new EsInt(result);
     }

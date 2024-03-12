@@ -27,7 +27,7 @@ public class EsBool extends EsValue<Boolean> {
 
   @Override
   public String asString() {
-    return String.valueOf(value);
+    return value ? "tak" : "nie";
   }
 
 }

@@ -42,10 +42,9 @@ public class EsVariable {
     return isConst;
   }
 
-  public EsVariable set(@NotNull EsValue<?> value) {
-    if (isConst()) {
-      throw new EsScriptError("Cannot modify value of immutable variable!");
-    }
+  public @NotNull EsVariable set(@NotNull EsValue<?> value) {
+    if (isConst())
+      throw new EsScriptError("Nie można zmodyfikować wartości stałej!");
     this.value = value;
     return this;
   }

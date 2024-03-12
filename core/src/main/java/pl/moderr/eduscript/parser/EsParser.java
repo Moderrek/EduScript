@@ -14,6 +14,7 @@ import pl.moderr.eduscript.types.EsInt;
 import pl.moderr.eduscript.types.EsStr;
 import pl.moderr.eduscript.types.EsVar;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class EsParser extends EsParserBase {
     } else {
       lhs = term();
       if (lhs == null)
-        throw new EsParserError(token().get().start().line(), token().get().start().col(), "Expression is null");
+        throw new EsParserError(token().get().start(), "Podjęto próbę przeanalizowania wyrażenia, ale nie została znaleziona.\n");
     }
 
     while (token().isPresent() && token().get().kind().isOperator()) {
@@ -95,7 +96,7 @@ public class EsParser extends EsParserBase {
 
   @Contract(" -> new")
   private @NotNull EsExpression statement() {
-    System.out.println("STATEMENT" + token().get());
+    // Define mutable variable
     if (matchStay(LET)) {
       consume(LET);
       String identifier = tokenNext().get().value();
@@ -103,6 +104,7 @@ public class EsParser extends EsParserBase {
       EsExpression value = expression();
       return new EsLetStatement(identifier, value, true);
     }
+    // Define const variable
     if (matchStay(CONST)) {
       consume(CONST);
       String identifier = tokenNext().get().value();
@@ -110,6 +112,7 @@ public class EsParser extends EsParserBase {
       EsExpression expression = expression();
       return new EsLetStatement(identifier, expression, false);
     }
+    // Block statement
     if (matchStay(CURLY_LEFT)) {
       consume(CURLY_LEFT);
       List<EsExpression> expressions = new ArrayList<>();
@@ -120,19 +123,21 @@ public class EsParser extends EsParserBase {
       consume(CURLY_RIGHT);
       return new EsBlockExpression(expressions.toArray(new EsExpression[expressions.size()]));
     }
+    // Return statement
     if (matchStay(RETURN)) {
       consume(RETURN);
       EsExpression expr = expression();
       return new EsReturnStatement(expr);
     }
+    // Assign statement
     if (match(IDENTIFIER, ASSIGN)) {
       EsToken identifier = lookTokenBack(2).get();
       EsExpression expr = expression();
       return new EsVariableAssignStatement(identifier, expr);
     }
-    EsToken token = token().get();
     // unknown
-    throw new EsScriptError(token.start().line(), token.start().col(), "Invalid statement " + token.toString());
+    EsToken token = token().get();
+    throw new EsScriptError(token.start(), MessageFormat.format("Nieprawidłowe wyrażenie {0}", token.toString()));
   }
 
 //  private EsExpression fnCall() {

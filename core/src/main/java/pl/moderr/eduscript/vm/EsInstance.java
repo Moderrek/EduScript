@@ -28,7 +28,7 @@ public class EsInstance {
     return new EsInstance();
   }
 
-  public void removeScript(EsScript script) {
+  public void removeScript(@NotNull EsScript script) {
     scripts.remove(script);
   }
 

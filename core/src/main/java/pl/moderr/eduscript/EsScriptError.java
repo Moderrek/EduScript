@@ -35,7 +35,7 @@ public class EsScriptError extends RuntimeException implements Positionable {
 
   @Override
   public String toString() {
-    return "EsError | " + start().toString() + ": " + getMessage();
+    return "Błąd skryptu | " + start().toString() + ": " + getMessage();
   }
 
   @Override

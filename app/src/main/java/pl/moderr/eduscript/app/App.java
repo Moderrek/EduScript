@@ -35,7 +35,7 @@ public class App {
     System.out.println(script.getVariable("a").get().unwrap());
     System.out.println(script.getVariable("b").get().unwrap()); // -> 15
     script.data().setVariable("a", 10);
-    script.run("zmien b = 5 + a * 2;");
+    script.run("b = 5 + a * 2;");
     System.out.println(script.getVariable("b").get().unwrap()); // -> 25
     System.out.println(script.getVariable("d").get().unwrap().equals(6));
     // Remove script data.
