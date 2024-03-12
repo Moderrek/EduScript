@@ -8,10 +8,7 @@ import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenKind;
-import pl.moderr.eduscript.statements.EsBlockExpression;
-import pl.moderr.eduscript.statements.EsLetStatement;
-import pl.moderr.eduscript.statements.EsOperatorStatement;
-import pl.moderr.eduscript.statements.EsReturnStatement;
+import pl.moderr.eduscript.statements.*;
 import pl.moderr.eduscript.types.EsBool;
 import pl.moderr.eduscript.types.EsInt;
 import pl.moderr.eduscript.types.EsStr;
@@ -127,6 +124,11 @@ public class EsParser extends EsParserBase {
       consume(RETURN);
       EsExpression expr = expression();
       return new EsReturnStatement(expr);
+    }
+    if (match(IDENTIFIER, ASSIGN)) {
+      EsToken identifier = lookTokenBack(2).get();
+      EsExpression expr = expression();
+      return new EsVariableAssignStatement(identifier, expr);
     }
     EsToken token = token().get();
     // unknown

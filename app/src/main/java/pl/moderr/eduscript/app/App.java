@@ -28,9 +28,11 @@ public class App {
         zmien c = pi;
         zmien d = 2 + 2 * 2;
         stala f = 3;
+        a = 1;
         """);
     // Modify script data after run.
     System.out.println(script.getDeclaredNames()); // local scope -> ["a", "b", "c", "d"]
+    System.out.println(script.getVariable("a").get().unwrap());
     System.out.println(script.getVariable("b").get().unwrap()); // -> 15
     script.data().setVariable("a", 10);
     script.run("zmien b = 5 + a * 2;");

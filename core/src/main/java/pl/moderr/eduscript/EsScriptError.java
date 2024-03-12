@@ -28,6 +28,11 @@ public class EsScriptError extends RuntimeException implements Positionable {
     this.position = new EsPosition(line, column);
   }
 
+  public EsScriptError(@NotNull EsPosition position, @NotNull String message) {
+    super(message);
+    this.position = position;
+  }
+
   @Override
   public String toString() {
     return "EsError | " + start().toString() + ": " + getMessage();
