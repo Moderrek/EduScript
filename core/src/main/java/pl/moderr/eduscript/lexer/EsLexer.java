@@ -73,9 +73,9 @@ public class EsLexer implements LexerMixinUtils {
       if (symbol().get() == ';') {
         if (lastToken().isEmpty() || !lastToken().get().match(INSTRUCTION_END)) {
           EsPosition start = position.clone();
-          move();
           tokens.add(new EsToken(INSTRUCTION_END, ";", start, position.clone()));
         }
+        move();
         continue;
       }
 
