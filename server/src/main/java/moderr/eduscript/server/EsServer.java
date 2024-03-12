@@ -4,7 +4,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsScriptError;
+import pl.moderr.eduscript.errors.EsScriptError;
 import pl.moderr.eduscript.vm.EsInstance;
 import pl.moderr.eduscript.vm.EsScript;
 

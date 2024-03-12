@@ -2,19 +2,19 @@ package pl.moderr.eduscript.vm;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pl.moderr.eduscript.ast.EsExpression;
-import pl.moderr.eduscript.ast.EsValue;
 
 import java.util.*;
 
 public class EsScript {
 
-  private final EsInstance vm;
+  private final EsInstance instance;
   private final UUID id;
   private final Stack<EsExpression> callStack;
 
-  public EsScript(EsInstance machine, UUID uuid) {
-    this.vm = machine;
+  public EsScript(EsInstance instance, UUID uuid) {
+    this.instance = instance;
     this.id = uuid;
     this.callStack = new Stack<>();
   }
@@ -28,45 +28,37 @@ public class EsScript {
   }
 
   public EduScriptData data() {
-    return vm.scripts.get(this);
+    return instance.scripts.get(this);
   }
 
   public Set<String> getDeclaredNames() {
     return data().getVariables().keySet();
   }
 
-  public Optional<EsVariable> getVariable(@NotNull String identifier) {
-    Optional<EsVariable> local = data().getVariable(identifier);
-    if (local.isPresent()) return local;
-    return getVirtualMachine().global.getVariable(identifier);
-  }
-
-  public EsInstance getVirtualMachine() {
-    return vm;
-  }
-
-  public void setVariable(@NotNull String identifier, @NotNull EsValue<?> value) {
-    data().setVariable(identifier, EsVariable.Mutable(identifier, value));
-  }
-
-  public void setVariable(@NotNull String identifier, @NotNull EsVariable variable) {
-    data().setVariable(identifier, variable);
+  public EsInstance getEsInstance() {
+    return instance;
   }
 
   public boolean hasDefinedVariable(@NotNull String identifier) {
     return data().getVariable(identifier).isPresent();
   }
 
-  public void remove() {
-    cleanup();
+  public Optional<EsVariable> findVariable(@NotNull String identifier) {
+    Optional<EsVariable> local = data().getVariable(identifier);
+    if (local.isPresent()) return local;
+    return getEsInstance().global.getVariable(identifier);
+  }
+
+  public @Nullable Object rawValue(@NotNull String identifier) {
+    return data().getVariable(identifier).map(EsVariable::unwrap).orElse(null);
   }
 
   public void cleanup() {
-    vm.removeScript(this);
+    instance.removeScript(this);
   }
 
   public void run(@NotNull String code) {
-    vm.run(this, code);
+    instance.run(this, code);
   }
 
   @Override

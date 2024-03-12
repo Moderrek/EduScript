@@ -1,8 +1,10 @@
-package pl.moderr.eduscript;
+package pl.moderr.eduscript.errors;
 
 import org.jetbrains.annotations.NotNull;
+import pl.moderr.eduscript.EsPosition;
 
 public class EsParserError extends EsScriptError {
+
   public EsParserError(String message) {
     super(message);
   }
@@ -20,7 +22,8 @@ public class EsParserError extends EsScriptError {
   }
 
   @Override
-  public String toString() {
-    return "Błąd analizy | " + start().toString() + ": " + getMessage();
+  protected @NotNull String prefix() {
+    return "Błąd analizy";
   }
+
 }

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Positionable {
 
-  @NotNull EsPosition start();
+  @NotNull
+  EsPosition start();
 
 }

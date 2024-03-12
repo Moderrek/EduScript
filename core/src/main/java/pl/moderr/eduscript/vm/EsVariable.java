@@ -2,8 +2,8 @@ package pl.moderr.eduscript.vm;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsValue;
+import pl.moderr.eduscript.errors.EsScriptError;
 import pl.moderr.eduscript.types.EsUnit;
 
 import java.util.Objects;
@@ -38,15 +38,15 @@ public class EsVariable {
     return !isConst;
   }
 
-  public boolean isConst() {
-    return isConst;
-  }
-
   public @NotNull EsVariable set(@NotNull EsValue<?> value) {
     if (isConst())
       throw new EsScriptError("Nie można zmodyfikować wartości stałej!");
     this.value = value;
     return this;
+  }
+
+  public boolean isConst() {
+    return isConst;
   }
 
   public @NotNull String getIdentifier() {
@@ -62,16 +62,16 @@ public class EsVariable {
   }
 
   @Override
+  public int hashCode() {
+    return Objects.hash(identifier, value);
+  }
+
+  @Override
   public boolean equals(Object object) {
     if (this == object) return true;
     if (object == null || getClass() != object.getClass()) return false;
     EsVariable that = (EsVariable) object;
     return Objects.equals(value, that.value);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(identifier, value);
   }
 
   @Override

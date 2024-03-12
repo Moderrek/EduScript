@@ -1,6 +1,8 @@
-package pl.moderr.eduscript;
+package pl.moderr.eduscript.errors;
 
 import org.jetbrains.annotations.NotNull;
+import pl.moderr.eduscript.EsPosition;
+import pl.moderr.eduscript.Positionable;
 
 /**
  * EsScriptError is the parent class of any exception.<br>
@@ -15,7 +17,7 @@ public class EsScriptError extends RuntimeException implements Positionable {
 
   public EsScriptError(String message) {
     super(message);
-    this.position = new EsPosition();
+    this.position = null;
   }
 
   public EsScriptError(int line, int column) {
@@ -35,11 +37,18 @@ public class EsScriptError extends RuntimeException implements Positionable {
 
   @Override
   public String toString() {
-    return "Błąd skryptu | " + start().toString() + ": " + getMessage();
+    if (position == null)
+      return prefix() + " | " + getMessage();
+    return prefix() + " | " + start() + " " + getMessage();
+  }
+
+  protected @NotNull String prefix() {
+    return "Błąd skryptu";
   }
 
   @Override
   public @NotNull EsPosition start() {
-    return position;
+    return position != null ? position : new EsPosition();
   }
+
 }

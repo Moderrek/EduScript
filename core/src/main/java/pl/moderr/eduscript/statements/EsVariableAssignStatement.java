@@ -1,9 +1,9 @@
 package pl.moderr.eduscript.statements;
 
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.ast.EsValue;
+import pl.moderr.eduscript.errors.EsScriptError;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.types.EsUnit;
 import pl.moderr.eduscript.vm.EsScript;

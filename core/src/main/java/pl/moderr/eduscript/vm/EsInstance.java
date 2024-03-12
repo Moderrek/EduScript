@@ -16,9 +16,13 @@ public class EsInstance {
   final EduScriptData global;
   final Map<EsScript, EduScriptData> scripts;
   public Consumer<String> out;
+  public Consumer<String> debug;
+  public boolean debugMode;
 
   public EsInstance() {
     this.out = System.out::print;
+    this.debug = System.out::println;
+    this.debugMode = false;
     this.scripts = new ConcurrentHashMap<>();
     this.global = new EduScriptData();
     global.setVariable("pi", Math.PI);
@@ -26,6 +30,12 @@ public class EsInstance {
 
   public static @NotNull EsInstance create() {
     return new EsInstance();
+  }
+
+  public void debug(@NotNull String message) {
+    if (!debugMode) return;
+    if (debug == null) return;
+    debug.accept(message);
   }
 
   public void removeScript(@NotNull EsScript script) {

@@ -1,9 +1,9 @@
 package pl.moderr.eduscript.types;
 
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsType;
 import pl.moderr.eduscript.ast.EsValue;
+import pl.moderr.eduscript.errors.EsScriptError;
 
 public class EsInt extends EsValue<Integer> {
 

@@ -1,6 +1,6 @@
 package pl.moderr.eduscript.app;
 
-import pl.moderr.eduscript.EsScriptError;
+import pl.moderr.eduscript.errors.EsScriptError;
 import pl.moderr.eduscript.vm.EsInstance;
 import pl.moderr.eduscript.vm.EsScript;
 
@@ -32,12 +32,12 @@ public class App {
         """);
     // Modify script data after run.
     System.out.println(script.getDeclaredNames()); // local scope -> ["a", "b", "c", "d"]
-    System.out.println(script.getVariable("a").get().unwrap());
-    System.out.println(script.getVariable("b").get().unwrap()); // -> 15
+    System.out.println(script.rawValue("a"));
+    System.out.println(script.rawValue("b")); // -> 15
     script.data().setVariable("a", 10);
     script.run("b = 5 + a * 2;");
-    System.out.println(script.getVariable("b").get().unwrap()); // -> 25
-    System.out.println(script.getVariable("d").get().unwrap().equals(6));
+    System.out.println(script.rawValue("b")); // -> 25
+    System.out.println(script.rawValue("d").equals(6));
     // Remove script data.
     script.cleanup();
   }

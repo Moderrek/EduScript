@@ -1,8 +1,8 @@
 package pl.moderr.eduscript.parser;
 
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsParserError;
 import pl.moderr.eduscript.ast.EsExpression;
+import pl.moderr.eduscript.errors.EsParserError;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenCollection;
 import pl.moderr.eduscript.lexer.EsTokenKind;
@@ -17,8 +17,9 @@ public abstract class EsParserBase implements ParserMixinUtils {
   private ArrayList<EsExpression> expressions;
 
   @Override
-  public EsTokenCollection tokens() {
-    return tokens;
+  public int addPos(int n) {
+    pos += n;
+    return pos;
   }
 
   @Override
@@ -27,9 +28,8 @@ public abstract class EsParserBase implements ParserMixinUtils {
   }
 
   @Override
-  public int addPos(int n) {
-    pos += n;
-    return pos;
+  public EsTokenCollection tokens() {
+    return tokens;
   }
 
   public void addExpression(@NotNull EsExpression expression) {
@@ -50,33 +50,12 @@ public abstract class EsParserBase implements ParserMixinUtils {
     return !(pos < 0 || pos >= tokens.size());
   }
 
-  public Optional<EsToken> lookTokenBack(int back) {
-    return lookTokenAhead(back * -1);
-  }
-
-  public Optional<EsToken> lookTokenAhead(int ahead) {
-    int index = pos + ahead;
-    if (!hasToken(index)) return Optional.empty();
-    return Optional.of(tokens.get(index));
-  }
-
   public boolean match(EsTokenKind kind) {
     Optional<EsToken> token = token();
     if (token.isEmpty()) return false;
     if (!token.get().match(kind)) return false;
     pos += 1;
     return true;
-  }
-
-  public Optional<EsToken> tokenNext() {
-    if (!hasToken()) return Optional.empty();
-    EsToken token = token().get();
-    pos += 1;
-    return Optional.of(token);
-  }
-
-  public boolean hasToken() {
-    return hasToken(pos);
   }
 
   public boolean matchStay(EsTokenKind kind) {
@@ -94,6 +73,12 @@ public abstract class EsParserBase implements ParserMixinUtils {
     return true;
   }
 
+  public Optional<EsToken> lookTokenAhead(int ahead) {
+    int index = pos + ahead;
+    if (!hasToken(index)) return Optional.empty();
+    return Optional.of(tokens.get(index));
+  }
+
   public EsToken consume(EsTokenKind kind) {
     Optional<EsToken> token = tokenNext();
     if (token.isEmpty()) {
@@ -107,6 +92,21 @@ public abstract class EsParserBase implements ParserMixinUtils {
           "Spodziewano się '" + kind + "', otrzymano '" + token.get().kind() + "'."
       );
     return token.get();
+  }
+
+  public Optional<EsToken> tokenNext() {
+    if (!hasToken()) return Optional.empty();
+    EsToken token = token().get();
+    pos += 1;
+    return Optional.of(token);
+  }
+
+  public Optional<EsToken> lookTokenBack(int back) {
+    return lookTokenAhead(back * -1);
+  }
+
+  public boolean hasToken() {
+    return hasToken(pos);
   }
 
   public EsExpression[] parse(@NotNull EsTokenCollection tokens) {
