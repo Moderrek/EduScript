@@ -53,7 +53,7 @@ public class EsServer extends WebSocketServer {
       return;
     }
     long end = System.currentTimeMillis() - start;
-    conn.send("Executed in " + end + "ms");
+    conn.send("\uD83D\uDEE0\uFE0F Wykonano w " + end + "ms.");
   }
 
   @Override

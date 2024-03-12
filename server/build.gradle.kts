@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     implementation(project(":core"))
-    implementation("org.java-websocket:Java-WebSocket:1.5.4")
+    implementation("org.java-websocket:Java-WebSocket:1.5.6")
 
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
@@ -37,4 +37,8 @@ application {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
 }

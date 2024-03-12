@@ -117,6 +117,30 @@ public class EsLexer implements LexerMixinUtils {
         tokens.add(token);
         continue;
       }
+      // Identifier literal
+      if (symbol().get() == '`') {
+        StringBuilder buffer = new StringBuilder();
+        EsPosition start = position.clone();
+        boolean foundEnd = false;
+        move();
+        while (!end()) {
+          if (symbol().get() == '`') {
+            foundEnd = true;
+            move();
+            break;
+          }
+          buffer.append(symbolNext().get());
+        }
+
+        if (!foundEnd) {
+          throw new EsSyntaxError(start(), "Nie można znaleźć końca nazwy.");
+        }
+
+        String string = buffer.toString();
+        EsToken token = EsToken.identifier(string, start, position.clone());
+        tokens.add(token);
+        continue;
+      }
       // String token
       if (symbol().get() == '"') {
         StringBuilder buffer = new StringBuilder();

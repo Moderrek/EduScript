@@ -5,6 +5,7 @@ import pl.moderr.eduscript.vm.EsInstance;
 import pl.moderr.eduscript.vm.EsScript;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class App {
 
@@ -28,16 +29,15 @@ public class App {
         zmien c = pi;
         zmien d = 2 + 2 * 2;
         stala f = 3;
-        a = 1;
         """);
     // Modify script data after run.
-    System.out.println(script.getDeclaredNames()); // local scope -> ["a", "b", "c", "d"]
+    System.out.println(script.getDeclaredNames()); // local scope -> ["a", "b", "c", "d", "f"]
     System.out.println(script.rawValue("a"));
     System.out.println(script.rawValue("b")); // -> 15
     script.data().setVariable("a", 10);
     script.run("b = 5 + a * 2;");
     System.out.println(script.rawValue("b")); // -> 25
-    System.out.println(script.rawValue("d").equals(6));
+    System.out.println(Objects.equals(script.rawValue("d"), 6));
     // Remove script data.
     script.cleanup();
   }
