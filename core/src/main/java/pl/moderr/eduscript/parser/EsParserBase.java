@@ -96,8 +96,11 @@ public abstract class EsParserBase implements ParserMixinUtils {
 
   public EsToken consume(EsTokenKind kind) {
     Optional<EsToken> token = tokenNext();
-    if (token.isEmpty())
+    if (token.isEmpty()) {
+      if (lookTokenBack(1).isPresent())
+        throw new EsParserError(lookTokenBack(1).get().end(), "Spodziewano się '" + kind + "'.");
       throw new EsParserError("Spodziewano się '" + kind + "'.");
+    }
     if (!token.get().match(kind))
       throw new EsParserError(
           token.get().start(),
