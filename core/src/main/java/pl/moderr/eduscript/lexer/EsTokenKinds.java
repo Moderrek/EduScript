@@ -2,30 +2,30 @@ package pl.moderr.eduscript.lexer;
 
 public final class EsTokenKinds {
 
-  public static final EsTokenKind INTEGER = new EsTokenKind("calk", false);
-  public static final EsTokenKind KEYWORD = new EsTokenKind("keyword", false);
-  public static final EsTokenKind IDENTIFIER = new EsTokenKind("identifier", false);
-  public static final EsTokenKind STRING = new EsTokenKind("string", false);
-  public static final EsTokenKind INSTRUCTION_END = new EsTokenKind("instruction end", false);
-  public static final EsTokenKind PAREN_LEFT = new EsTokenKind("parentheses left", false);
-  public static final EsTokenKind PAREN_RIGHT = new EsTokenKind("parentheses right", false);
-  public static final EsTokenKind CURLY_LEFT = new EsTokenKind("curly left", false);
-  public static final EsTokenKind CURLY_RIGHT = new EsTokenKind("curly right", false);
-  public static final EsTokenKind BRACKET_LEFT = new EsTokenKind("bracket left", false);
-  public static final EsTokenKind BRACKET_RIGHT = new EsTokenKind("bracket right", false);
-  public static final EsTokenKind SEPARATOR_COMMA = new EsTokenKind("separator", false);
+  public static final EsTokenKind INTEGER = new EsTokenKind("calkowita", false);
+  public static final EsTokenKind KEYWORD = new EsTokenKind("słowo kluczowe", false);
+  public static final EsTokenKind IDENTIFIER = new EsTokenKind("identyfikator", false);
+  public static final EsTokenKind STRING = new EsTokenKind("tekst", false);
+  public static final EsTokenKind INSTRUCTION_END = new EsTokenKind("średnik", false);
+  public static final EsTokenKind PAREN_LEFT = new EsTokenKind("otwarty nawias okrągły", false);
+  public static final EsTokenKind PAREN_RIGHT = new EsTokenKind("zamknięty nawias okrągły", false);
+  public static final EsTokenKind CURLY_LEFT = new EsTokenKind("otwarty nawias sześcienny", false);
+  public static final EsTokenKind CURLY_RIGHT = new EsTokenKind("zamknięty nawias sześcienny", false);
+  public static final EsTokenKind BRACKET_LEFT = new EsTokenKind("otwarty nawias kwadratowy", false);
+  public static final EsTokenKind BRACKET_RIGHT = new EsTokenKind("zamknięty nawias kwadratowy", false);
+  public static final EsTokenKind SEPARATOR_COMMA = new EsTokenKind("przecinek", false);
   public static final EsTokenKind PLUS = new EsTokenKind("plus", true)
       .operatorPrecedence(1);
   public static final EsTokenKind MINUS = new EsTokenKind("minus", true)
       .operatorPrecedence(1);
-  public static final EsTokenKind TRUE = new EsTokenKind("true", false);
-  public static final EsTokenKind ASSIGN = new EsTokenKind("assign", false);
-  public static final EsTokenKind LET = new EsTokenKind("let", false);
-  public static final EsTokenKind CONST = new EsTokenKind("const", false);
-  public static final EsTokenKind FALSE = new EsTokenKind("false", false);
-  public static final EsTokenKind IF = new EsTokenKind("if", false);
-  public static final EsTokenKind WHILE = new EsTokenKind("while", false);
-  public static final EsTokenKind MATCH = new EsTokenKind("match", false);
+  public static final EsTokenKind TRUE = new EsTokenKind("prawda", false);
+  public static final EsTokenKind ASSIGN = new EsTokenKind("przypisanie", false);
+  public static final EsTokenKind LET = new EsTokenKind("definicja zmiennej", false);
+  public static final EsTokenKind CONST = new EsTokenKind("stala", false);
+  public static final EsTokenKind FALSE = new EsTokenKind("falsz", false);
+  public static final EsTokenKind IF = new EsTokenKind("jezeli", false);
+  public static final EsTokenKind WHILE = new EsTokenKind("dopoki", false);
+  public static final EsTokenKind MATCH = new EsTokenKind("dopasuj", false);
   public static final EsTokenKind PLUS_ASSIGN = new EsTokenKind("plus assign", true);
   public static final EsTokenKind MULTIPLY = new EsTokenKind("multiply", true)
       .operatorPrecedence(2);

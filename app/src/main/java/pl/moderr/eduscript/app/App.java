@@ -14,7 +14,7 @@ public class App {
       new App().run();
     } catch (EsScriptError error) {
       if (debug) error.printStackTrace();
-      System.out.println(error.getMessage());
+      System.err.println(error);
     }
   }
 
