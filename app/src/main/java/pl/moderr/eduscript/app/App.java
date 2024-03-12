@@ -4,13 +4,16 @@ import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.vm.EsInstance;
 import pl.moderr.eduscript.vm.EsScript;
 
+import java.util.Arrays;
+
 public class App {
 
   public static void main(String[] args) {
+    boolean debug = Arrays.stream(args).toList().contains("--debug");
     try {
       new App().run();
     } catch (EsScriptError error) {
-      error.printStackTrace();
+      if (debug) error.printStackTrace();
       System.out.println(error.getMessage());
     }
   }
@@ -34,11 +37,7 @@ public class App {
     System.out.println(script.getVariable("b").get().unwrap()); // -> 25
     System.out.println(script.getVariable("d").get().unwrap().equals(6));
     // Remove script data.
-    script.remove();
-  }
-
-  public String getGreeting() {
-    return "Hello World!";
+    script.cleanup();
   }
 
 }
