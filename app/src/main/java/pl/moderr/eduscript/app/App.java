@@ -24,6 +24,7 @@ public class App {
         zmien b = 5 + a * 2;
         zmien c = pi;
         zmien d = 2 + 2 * 2;
+        stala f = 3;
         """);
     // Modify script data after run.
     System.out.println(script.getDeclaredNames()); // local scope -> ["a", "b", "c", "d"]

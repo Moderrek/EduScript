@@ -104,7 +104,14 @@ public class EsParser extends EsParserBase {
       String identifier = tokenNext().get().value();
       consume(ASSIGN);
       EsExpression value = expression();
-      return new EsLetStatement(identifier, value);
+      return new EsLetStatement(identifier, value, true);
+    }
+    if (matchStay(CONST)) {
+      consume(CONST);
+      String identifier = tokenNext().get().value();
+      consume(ASSIGN);
+      EsExpression expression = expression();
+      return new EsLetStatement(identifier, expression, false);
     }
     if (matchStay(CURLY_LEFT)) {
       consume(CURLY_LEFT);

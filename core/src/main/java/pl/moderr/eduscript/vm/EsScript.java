@@ -49,6 +49,10 @@ public class EsScript {
     data().setVariable(identifier, EsVariable.Mutable(identifier, value));
   }
 
+  public void setVariable(@NotNull String identifier, @NotNull EsVariable variable) {
+    data().setVariable(identifier, variable);
+  }
+
   public boolean hasDefinedVariable(@NotNull String identifier) {
     return data().getVariable(identifier).isPresent();
   }
