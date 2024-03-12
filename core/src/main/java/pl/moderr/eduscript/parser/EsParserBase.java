@@ -61,9 +61,11 @@ public abstract class EsParserBase implements ParserMixinUtils {
   }
 
   public boolean match(EsTokenKind kind) {
-    Optional<EsToken> token = tokenNext();
-    return token.map(esToken -> esToken.match(kind))
-        .orElse(false);
+    Optional<EsToken> token = token();
+    if (token.isEmpty()) return false;
+    if (!token.get().match(kind)) return false;
+    pos += 1;
+    return true;
   }
 
   public Optional<EsToken> tokenNext() {
