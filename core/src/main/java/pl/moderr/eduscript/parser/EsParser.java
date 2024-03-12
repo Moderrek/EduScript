@@ -3,12 +3,15 @@ package pl.moderr.eduscript.parser;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pl.moderr.eduscript.EsParserError;
 import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenKind;
+import pl.moderr.eduscript.statements.EsBlockExpression;
 import pl.moderr.eduscript.statements.EsLetStatement;
 import pl.moderr.eduscript.statements.EsOperatorStatement;
+import pl.moderr.eduscript.statements.EsReturnStatement;
 import pl.moderr.eduscript.types.EsBool;
 import pl.moderr.eduscript.types.EsInt;
 import pl.moderr.eduscript.types.EsStr;
@@ -37,7 +40,7 @@ public class EsParser extends EsParserBase {
     } else {
       lhs = term();
       if (lhs == null)
-        throw new EsScriptError("Expression is null");
+        throw new EsParserError(token().get().start().line(), token().get().start().col(), "Expression is null");
     }
 
     while (token().isPresent() && token().get().kind().isOperator()) {
@@ -80,29 +83,47 @@ public class EsParser extends EsParserBase {
     if (matchStay(IDENTIFIER)) {
       return new EsVar(tokenNext().get().value());
     }
+    // parse returnable block of code
+    if (match(CURLY_LEFT)) {
+      List<EsExpression> expressions = new ArrayList<>();
+      while (token().isPresent() && !token().get().match(CURLY_RIGHT)) {
+        expressions.add(statement());
+        consume(INSTRUCTION_END);
+      }
+      consume(CURLY_RIGHT);
+      return new EsBlockExpression(expressions.toArray(new EsExpression[expressions.size()]));
+    }
     return null;
   }
 
   @Contract(" -> new")
   private @NotNull EsExpression statement() {
-    if (match(LET)) {
+    System.out.println("STATEMENT" + token().get());
+    if (matchStay(LET)) {
+      consume(LET);
       String identifier = tokenNext().get().value();
       consume(ASSIGN);
       EsExpression value = expression();
       return new EsLetStatement(identifier, value);
     }
-    if (match(CURLY_LEFT)) {
+    if (matchStay(CURLY_LEFT)) {
+      consume(CURLY_LEFT);
       List<EsExpression> expressions = new ArrayList<>();
       while (pos() < tokens().size() && !token().get().match(CURLY_RIGHT)) {
         expressions.add(statement());
         consume(INSTRUCTION_END);
       }
       consume(CURLY_RIGHT);
-//      EsExpression[]
+      return new EsBlockExpression(expressions.toArray(new EsExpression[expressions.size()]));
+    }
+    if (matchStay(RETURN)) {
+      consume(RETURN);
+      EsExpression expr = expression();
+      return new EsReturnStatement(expr);
     }
     EsToken token = token().get();
     // unknown
-    throw new EsScriptError(token.start().line(), token.start().col(), "Invalid statement");
+    throw new EsScriptError(token.start().line(), token.start().col(), "Invalid statement " + token.toString());
   }
 
 //  private EsExpression fnCall() {

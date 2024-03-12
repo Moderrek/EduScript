@@ -20,7 +20,7 @@ public class EsLetStatement extends EsExpression {
     EsValue<?> value = expr.evaluate(script);
     script.setVariable(id, value);
     script.getVirtualMachine().out.accept(id + "=" + value);
-    return script.getVariable(id).get();
+    return script.getVariable(id).get().get();
   }
 
 }

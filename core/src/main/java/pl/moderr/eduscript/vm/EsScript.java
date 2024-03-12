@@ -2,7 +2,7 @@ package pl.moderr.eduscript.vm;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import pl.moderr.eduscript.ast.EsExpression;
 import pl.moderr.eduscript.ast.EsValue;
 
 import java.util.*;
@@ -11,17 +11,19 @@ public class EsScript {
 
   private final EsInstance vm;
   private final UUID id;
+  private final Stack<EsExpression> callStack;
 
   public EsScript(EsInstance machine, UUID uuid) {
     this.vm = machine;
     this.id = uuid;
+    this.callStack = new Stack<>();
   }
 
   public UUID getId() {
     return id;
   }
 
-  public Map<String, EsValue<?>> getVariables() {
+  public Map<String, EsVariable> getVariables() {
     return data().getVariables();
   }
 
@@ -33,8 +35,8 @@ public class EsScript {
     return data().getVariables().keySet();
   }
 
-  public Optional<EsValue<?>> getVariable(@NotNull String identifier) {
-    Optional<EsValue<?>> local = data().getVariable(identifier);
+  public Optional<EsVariable> getVariable(@NotNull String identifier) {
+    Optional<EsVariable> local = data().getVariable(identifier);
     if (local.isPresent()) return local;
     return getVirtualMachine().global.getVariable(identifier);
   }
@@ -43,8 +45,8 @@ public class EsScript {
     return vm;
   }
 
-  public void setVariable(@NotNull String identifier, @Nullable EsValue<?> value) {
-    data().setVariable(identifier, value);
+  public void setVariable(@NotNull String identifier, @NotNull EsValue<?> value) {
+    data().setVariable(identifier, EsVariable.Mutable(identifier, value));
   }
 
   public boolean hasDefinedVariable(@NotNull String identifier) {
@@ -76,4 +78,7 @@ public class EsScript {
     return Objects.equals(id, esScript.id);
   }
 
+  public Stack<EsExpression> getCallStack() {
+    return callStack;
+  }
 }

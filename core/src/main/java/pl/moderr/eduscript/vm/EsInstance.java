@@ -13,14 +13,15 @@ import java.util.function.Consumer;
 
 public class EsInstance {
 
-  public Consumer<String> out;
   final EduScriptData global;
   final Map<EsScript, EduScriptData> scripts;
+  public Consumer<String> out;
 
   public EsInstance() {
+    this.out = System.out::print;
     this.scripts = new ConcurrentHashMap<>();
     this.global = new EduScriptData();
-    global.setVariable("pi", 3.14f);
+    global.setVariable("pi", Math.PI);
   }
 
   public static @NotNull EsInstance create() {

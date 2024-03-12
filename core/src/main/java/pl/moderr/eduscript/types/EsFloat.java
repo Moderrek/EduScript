@@ -3,20 +3,20 @@ package pl.moderr.eduscript.types;
 import pl.moderr.eduscript.ast.EsType;
 import pl.moderr.eduscript.ast.EsValue;
 
-public class EsFloat extends EsValue<Float> {
+public class EsFloat extends EsValue<Double> {
 
-  private final float value;
+  private final double value;
 
   public EsFloat() {
     this.value = 0;
   }
 
-  public EsFloat(float value) {
+  public EsFloat(double value) {
     this.value = value;
   }
 
   @Override
-  public Float unwrap() {
+  public Double unwrap() {
     return value;
   }
 

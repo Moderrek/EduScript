@@ -46,6 +46,7 @@ public class EsServer extends WebSocketServer {
       script = instance.run(message);
     } catch (EsScriptError scriptError) {
       conn.send(scriptError.toString());
+      scriptError.printStackTrace();
       return;
     } catch (Exception e) {
       conn.send("Failed to run script.");

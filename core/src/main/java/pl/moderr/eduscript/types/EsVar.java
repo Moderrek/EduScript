@@ -5,6 +5,7 @@ import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsType;
 import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.vm.EsScript;
+import pl.moderr.eduscript.vm.EsVariable;
 
 import java.util.Optional;
 
@@ -33,10 +34,10 @@ public class EsVar extends EsValue<String> {
 
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {
-    Optional<EsValue<?>> variable = script.getVariable(identifier);
+    Optional<EsVariable> variable = script.getVariable(identifier);
     if (variable.isEmpty()) {
       throw new EsScriptError("Undefined variable '" + identifier + "'");
     }
-    return variable.get();
+    return variable.get().get();
   }
 }
