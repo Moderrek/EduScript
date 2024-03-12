@@ -6,12 +6,10 @@ import org.jetbrains.annotations.Nullable;
 import pl.moderr.eduscript.EsParserError;
 import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsExpression;
+import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenKind;
 import pl.moderr.eduscript.statements.*;
-import pl.moderr.eduscript.types.EsBool;
-import pl.moderr.eduscript.types.EsInt;
-import pl.moderr.eduscript.types.EsStr;
 import pl.moderr.eduscript.types.EsVar;
 
 import java.text.MessageFormat;
@@ -34,13 +32,12 @@ public class EsParser extends EsParserBase {
   private @NotNull EsExpression expression(int minPrecedence) {
     EsExpression lhs;
     if (matchStay(MINUS) || matchStay(PLUS)) {
-      lhs = new EsInt();
+      lhs = EsValue.of(0);
     } else {
       lhs = term();
       if (lhs == null)
-        throw new EsParserError(token().get().start(), "Podjęto próbę przeanalizowania wyrażenia, ale nie została znaleziona.\n");
+        throw new EsParserError(token().get().start(), "Podjęto próbę przeanalizowania wyrażenia, ale nie została znaleziona.");
     }
-
     while (token().isPresent() && token().get().kind().isOperator()) {
       if (token().isEmpty()) break;
       EsToken operator = token().get();
@@ -52,7 +49,6 @@ public class EsParser extends EsParserBase {
       EsExpression rhs = expression(nextMinPrecedence);
       lhs = new EsOperatorStatement(lhs, operator.kind(), rhs);
     }
-
     return lhs;
   }
 
@@ -65,17 +61,17 @@ public class EsParser extends EsParserBase {
     if (matchStay(INTEGER)) {
       EsToken literalInt = tokenNext().get();
       String literal = literalInt.value();
-      int value = Integer.parseInt(literal);
-      return new EsInt(value);
+      int integer = Integer.parseInt(literal);
+      return EsValue.of(integer);
     }
     // parse str
     if (matchStay(STRING)) {
-      return new EsStr(tokenNext().get().value());
+      return EsValue.of(tokenNext().get().value());
     }
     // parse bool
     if (matchStay(TRUE) || matchStay(FALSE)) {
-      EsTokenKind value = tokenNext().get().kind();
-      return new EsBool(value == TRUE);
+      EsTokenKind tokenKind = tokenNext().get().kind();
+      return EsValue.of(tokenKind == TRUE);
     }
     // parse variable
     if (matchStay(IDENTIFIER)) {

@@ -2,6 +2,7 @@ package pl.moderr.eduscript.ast;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pl.moderr.eduscript.types.*;
 import pl.moderr.eduscript.vm.EsScript;
 
 public abstract class EsValue<V> extends EsExpression {
@@ -54,6 +55,26 @@ public abstract class EsValue<V> extends EsExpression {
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {
     return this;
+  }
+
+  public static @NotNull EsValue<Boolean> of(boolean value) {
+    return new EsBool(value);
+  }
+
+  public static @NotNull EsValue<Integer> of(int value) {
+    return new EsInt(value);
+  }
+
+  public static @NotNull EsValue<Double> of(double value) {
+    return new EsFloat(value);
+  }
+
+  public static @NotNull EsValue<String> of(String value) {
+    return new EsStr(value);
+  }
+
+  public static @NotNull EsValue<Void> of() {
+    return new EsUnit();
   }
 
 }
