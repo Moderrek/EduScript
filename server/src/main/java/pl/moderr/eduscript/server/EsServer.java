@@ -1,4 +1,4 @@
-package moderr.eduscript.server;
+package pl.moderr.eduscript.server;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;

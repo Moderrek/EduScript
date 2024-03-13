@@ -1,4 +1,4 @@
-package moderr.eduscript.server;
+package pl.moderr.eduscript.server;
 
 public class App {
 
