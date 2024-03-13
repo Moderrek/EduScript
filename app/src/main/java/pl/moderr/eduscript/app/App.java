@@ -1,17 +1,21 @@
 package pl.moderr.eduscript.app;
 
-import pl.moderr.eduscript.EsScriptError;
+import pl.moderr.eduscript.errors.EsScriptError;
 import pl.moderr.eduscript.vm.EsInstance;
 import pl.moderr.eduscript.vm.EsScript;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 public class App {
 
   public static void main(String[] args) {
+    boolean debug = Arrays.stream(args).toList().contains("--debug");
     try {
       new App().run();
     } catch (EsScriptError error) {
-      error.printStackTrace();
-      System.out.println(error.getMessage());
+      if (debug) error.printStackTrace();
+      System.err.println(error);
     }
   }
 
@@ -27,18 +31,15 @@ public class App {
         stala f = 3;
         """);
     // Modify script data after run.
-    System.out.println(script.getDeclaredNames()); // local scope -> ["a", "b", "c", "d"]
-    System.out.println(script.getVariable("b").get().unwrap()); // -> 15
+    System.out.println(script.getDeclaredNames()); // local scope -> ["a", "b", "c", "d", "f"]
+    System.out.println(script.rawValue("a"));
+    System.out.println(script.rawValue("b")); // -> 15
     script.data().setVariable("a", 10);
-    script.run("zmien b = 5 + a * 2;");
-    System.out.println(script.getVariable("b").get().unwrap()); // -> 25
-    System.out.println(script.getVariable("d").get().unwrap().equals(6));
+    script.run("b = 5 + a * 2;");
+    System.out.println(script.rawValue("b")); // -> 25
+    System.out.println(Objects.equals(script.rawValue("d"), 6));
     // Remove script data.
-    script.remove();
-  }
-
-  public String getGreeting() {
-    return "Hello World!";
+    script.cleanup();
   }
 
 }

@@ -1,9 +1,8 @@
 package pl.moderr.eduscript.parser;
 
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsPosition;
-import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsExpression;
+import pl.moderr.eduscript.errors.EsParserError;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenCollection;
 import pl.moderr.eduscript.lexer.EsTokenKind;
@@ -18,8 +17,9 @@ public abstract class EsParserBase implements ParserMixinUtils {
   private ArrayList<EsExpression> expressions;
 
   @Override
-  public EsTokenCollection tokens() {
-    return tokens;
+  public int addPos(int n) {
+    pos += n;
+    return pos;
   }
 
   @Override
@@ -28,9 +28,8 @@ public abstract class EsParserBase implements ParserMixinUtils {
   }
 
   @Override
-  public int addPos(int n) {
-    pos += n;
-    return pos;
+  public EsTokenCollection tokens() {
+    return tokens;
   }
 
   public void addExpression(@NotNull EsExpression expression) {
@@ -51,8 +50,27 @@ public abstract class EsParserBase implements ParserMixinUtils {
     return !(pos < 0 || pos >= tokens.size());
   }
 
-  public Optional<EsToken> lookTokenBack(int back) {
-    return lookTokenAhead(back * -1);
+  public boolean match(EsTokenKind kind) {
+    Optional<EsToken> token = token();
+    if (token.isEmpty()) return false;
+    if (!token.get().match(kind)) return false;
+    pos += 1;
+    return true;
+  }
+
+  public boolean matchStay(EsTokenKind kind) {
+    return token().map(token -> token.match(kind)).orElse(false);
+  }
+
+  public boolean match(EsTokenKind @NotNull ... kinds) {
+    int offset = 0;
+    for (EsTokenKind kind : kinds) {
+      Optional<EsToken> token = lookTokenAhead(offset++);
+      if (token.isEmpty()) return false;
+      if (!token.get().match(kind)) return false;
+    }
+    pos += kinds.length;
+    return true;
   }
 
   public Optional<EsToken> lookTokenAhead(int ahead) {
@@ -61,10 +79,19 @@ public abstract class EsParserBase implements ParserMixinUtils {
     return Optional.of(tokens.get(index));
   }
 
-  public boolean match(EsTokenKind kind) {
+  public EsToken consume(EsTokenKind kind) {
     Optional<EsToken> token = tokenNext();
-    return token.map(esToken -> esToken.match(kind))
-        .orElse(false);
+    if (token.isEmpty()) {
+      if (lookTokenBack(1).isPresent())
+        throw new EsParserError(lookTokenBack(1).get().end(), "Spodziewano się '" + kind + "'.");
+      throw new EsParserError("Spodziewano się '" + kind + "'.");
+    }
+    if (!token.get().match(kind))
+      throw new EsParserError(
+          token.get().start(),
+          "Spodziewano się '" + kind + "', otrzymano '" + token.get().kind() + "'."
+      );
+    return token.get();
   }
 
   public Optional<EsToken> tokenNext() {
@@ -74,37 +101,12 @@ public abstract class EsParserBase implements ParserMixinUtils {
     return Optional.of(token);
   }
 
+  public Optional<EsToken> lookTokenBack(int back) {
+    return lookTokenAhead(back * -1);
+  }
+
   public boolean hasToken() {
     return hasToken(pos);
-  }
-
-  public boolean matchStay(EsTokenKind kind) {
-    return token().map(token -> token.match(kind)).orElse(false);
-  }
-
-  public boolean match(EsTokenKind @NotNull ... kinds) {
-    for (EsTokenKind kind : kinds) {
-      Optional<EsToken> token = token();
-      if (token.isEmpty()) return false;
-      if (!token.get().match(kind)) return false;
-    }
-    pos += kinds.length;
-    return true;
-  }
-
-  public EsToken consume(EsTokenKind kind) {
-    Optional<EsToken> token = tokenNext();
-    if (token.isEmpty())
-      throw new EsScriptError("expected " + kind);
-    if (!token.get().match(kind)) {
-      EsPosition start = token.get().start();
-      throw new EsScriptError(
-          start.line(),
-          start.col(),
-          "expected " + kind + ", got " + token.get().kind()
-      );
-    }
-    return token.get();
   }
 
   public EsExpression[] parse(@NotNull EsTokenCollection tokens) {

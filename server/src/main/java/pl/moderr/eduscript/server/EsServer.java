@@ -4,7 +4,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsScriptError;
+import pl.moderr.eduscript.errors.EsScriptError;
 import pl.moderr.eduscript.vm.EsInstance;
 import pl.moderr.eduscript.vm.EsScript;
 
@@ -53,7 +53,7 @@ public class EsServer extends WebSocketServer {
       return;
     }
     long end = System.currentTimeMillis() - start;
-    conn.send("Executed in " + end + "ms");
+    conn.send("\uD83D\uDEE0\uFE0F Wykonano w " + end + "ms.");
   }
 
   @Override

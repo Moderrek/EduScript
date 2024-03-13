@@ -3,20 +3,16 @@ package pl.moderr.eduscript.parser;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pl.moderr.eduscript.EsParserError;
-import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsExpression;
+import pl.moderr.eduscript.ast.EsValue;
+import pl.moderr.eduscript.errors.EsParserError;
+import pl.moderr.eduscript.errors.EsScriptError;
 import pl.moderr.eduscript.lexer.EsToken;
 import pl.moderr.eduscript.lexer.EsTokenKind;
-import pl.moderr.eduscript.statements.EsBlockExpression;
-import pl.moderr.eduscript.statements.EsLetStatement;
-import pl.moderr.eduscript.statements.EsOperatorStatement;
-import pl.moderr.eduscript.statements.EsReturnStatement;
-import pl.moderr.eduscript.types.EsBool;
-import pl.moderr.eduscript.types.EsInt;
-import pl.moderr.eduscript.types.EsStr;
+import pl.moderr.eduscript.statements.*;
 import pl.moderr.eduscript.types.EsVar;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +32,12 @@ public class EsParser extends EsParserBase {
   private @NotNull EsExpression expression(int minPrecedence) {
     EsExpression lhs;
     if (matchStay(MINUS) || matchStay(PLUS)) {
-      lhs = new EsInt();
+      lhs = EsValue.of(0);
     } else {
       lhs = term();
       if (lhs == null)
-        throw new EsParserError(token().get().start().line(), token().get().start().col(), "Expression is null");
+        throw new EsParserError(token().get().start(), "Podjęto próbę przeanalizowania wyrażenia, ale nie została znaleziona.");
     }
-
     while (token().isPresent() && token().get().kind().isOperator()) {
       if (token().isEmpty()) break;
       EsToken operator = token().get();
@@ -54,7 +49,6 @@ public class EsParser extends EsParserBase {
       EsExpression rhs = expression(nextMinPrecedence);
       lhs = new EsOperatorStatement(lhs, operator.kind(), rhs);
     }
-
     return lhs;
   }
 
@@ -67,17 +61,17 @@ public class EsParser extends EsParserBase {
     if (matchStay(INTEGER)) {
       EsToken literalInt = tokenNext().get();
       String literal = literalInt.value();
-      int value = Integer.parseInt(literal);
-      return new EsInt(value);
+      int integer = Integer.parseInt(literal);
+      return EsValue.of(integer);
     }
     // parse str
     if (matchStay(STRING)) {
-      return new EsStr(tokenNext().get().value());
+      return EsValue.of(tokenNext().get().value());
     }
     // parse bool
     if (matchStay(TRUE) || matchStay(FALSE)) {
-      EsTokenKind value = tokenNext().get().kind();
-      return new EsBool(value == TRUE);
+      EsTokenKind tokenKind = tokenNext().get().kind();
+      return EsValue.of(tokenKind == TRUE);
     }
     // parse variable
     if (matchStay(IDENTIFIER)) {
@@ -98,7 +92,7 @@ public class EsParser extends EsParserBase {
 
   @Contract(" -> new")
   private @NotNull EsExpression statement() {
-    System.out.println("STATEMENT" + token().get());
+    // Define mutable variable
     if (matchStay(LET)) {
       consume(LET);
       String identifier = tokenNext().get().value();
@@ -106,6 +100,7 @@ public class EsParser extends EsParserBase {
       EsExpression value = expression();
       return new EsLetStatement(identifier, value, true);
     }
+    // Define const variable
     if (matchStay(CONST)) {
       consume(CONST);
       String identifier = tokenNext().get().value();
@@ -113,6 +108,7 @@ public class EsParser extends EsParserBase {
       EsExpression expression = expression();
       return new EsLetStatement(identifier, expression, false);
     }
+    // Block statement
     if (matchStay(CURLY_LEFT)) {
       consume(CURLY_LEFT);
       List<EsExpression> expressions = new ArrayList<>();
@@ -123,14 +119,21 @@ public class EsParser extends EsParserBase {
       consume(CURLY_RIGHT);
       return new EsBlockExpression(expressions.toArray(new EsExpression[expressions.size()]));
     }
+    // Return statement
     if (matchStay(RETURN)) {
       consume(RETURN);
       EsExpression expr = expression();
       return new EsReturnStatement(expr);
     }
-    EsToken token = token().get();
+    // Assign statement
+    if (match(IDENTIFIER, ASSIGN)) {
+      EsToken identifier = lookTokenBack(2).get();
+      EsExpression expr = expression();
+      return new EsVariableAssignStatement(identifier, expr);
+    }
     // unknown
-    throw new EsScriptError(token.start().line(), token.start().col(), "Invalid statement " + token.toString());
+    EsToken token = token().get();
+    throw new EsScriptError(token.start(), MessageFormat.format("Nieprawidłowe wyrażenie {0}", token.toString()));
   }
 
 //  private EsExpression fnCall() {

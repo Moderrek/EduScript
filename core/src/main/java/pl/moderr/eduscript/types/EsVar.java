@@ -1,9 +1,9 @@
 package pl.moderr.eduscript.types;
 
 import org.jetbrains.annotations.NotNull;
-import pl.moderr.eduscript.EsScriptError;
 import pl.moderr.eduscript.ast.EsType;
 import pl.moderr.eduscript.ast.EsValue;
+import pl.moderr.eduscript.errors.EsRuntimeError;
 import pl.moderr.eduscript.vm.EsScript;
 import pl.moderr.eduscript.vm.EsVariable;
 
@@ -34,10 +34,10 @@ public class EsVar extends EsValue<String> {
 
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {
-    Optional<EsVariable> variable = script.getVariable(identifier);
-    if (variable.isEmpty()) {
-      throw new EsScriptError("Undefined variable '" + identifier + "'");
-    }
+    Optional<EsVariable> variable = script.findVariable(identifier);
+    if (variable.isEmpty())
+      throw new EsRuntimeError("Niezdefiniowana wartość '" + identifier + "'.");
     return variable.get().get();
   }
+
 }

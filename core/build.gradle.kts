@@ -29,3 +29,7 @@ java {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 }
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}

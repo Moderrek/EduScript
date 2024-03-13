@@ -21,9 +21,8 @@ public class EsLetStatement extends EsExpression {
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {
     EsValue<?> value = expr.evaluate(script);
-    script.setVariable(id, mutable ? EsVariable.Mutable(id, value) : EsVariable.Const(id, value));
-    script.getVirtualMachine().out.accept((mutable ? "var " : "const ") + id + "=" + value + '\n');
-    return script.getVariable(id).get().get();
+    script.data().setVariable(id, mutable ? EsVariable.Mutable(id, value) : EsVariable.Const(id, value));
+    return script.data().getVariable(id).get().get();
   }
 
 }
