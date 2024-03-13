@@ -58,9 +58,8 @@ public class EsServer extends WebSocketServer {
 
   @Override
   public void onError(WebSocket conn, Exception ex) {
-    if (conn != null) {
-      connections.remove(conn);
-    }
+    if (conn == null) return;
+    connections.remove(conn);
     System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
   }
 
