@@ -131,20 +131,26 @@ public class EsParser extends EsParserBase {
       EsExpression expr = expression();
       return new EsVariableAssignStatement(identifier, expr);
     }
+    // Function statement
+    if (match(IDENTIFIER, PAREN_LEFT)) {
+      return fnCall();
+    }
     // unknown
     EsToken token = token().get();
     throw new EsScriptError(token.start(), MessageFormat.format("Nieprawidłowe wyrażenie {0}", token.toString()));
   }
 
-//  private EsExpression fnCall() {
-//    EsToken name = consume(IDENTIFIER);
-//    boolean haveArgs = false;
-//    consume(PAREN_LEFT);
-//    do {
-//      haveArgs = true;
-//      EsExpression value = expression();
-//    } while (match(SEPARATOR_COMMA));
-//    consume(PAREN_RIGHT);
-//
-//  }
+  @Contract(" -> new")
+  private @NotNull EsExpression fnCall() {
+    EsToken name = lookTokenBack(2).get();
+    ArrayList<EsExpression> args = new ArrayList<>();
+    boolean haveArgs = false;
+    do {
+      haveArgs = true;
+      args.add(expression());
+    } while (match(SEPARATOR_COMMA));
+    consume(PAREN_RIGHT);
+    return new EsFunctionCall(name, args);
+  }
+
 }

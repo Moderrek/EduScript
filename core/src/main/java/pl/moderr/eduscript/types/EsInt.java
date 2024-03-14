@@ -1,6 +1,7 @@
 package pl.moderr.eduscript.types;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pl.moderr.eduscript.ast.EsType;
 import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.errors.EsScriptError;
@@ -30,6 +31,12 @@ public class EsInt extends EsValue<Integer> {
       int result = value + right.unwrap();
       return new EsInt(result);
     }
+    if (other.isType(EsFloat.class)) {
+      EsFloat right = other.cast(EsFloat.class);
+      if (right == null) throw new EsScriptError("Nie można rzutować typu!");
+      double result = value + right.unwrap();
+      return new EsFloat(result);
+    }
     throw new UnsupportedOperationException();
   }
 
@@ -41,7 +48,18 @@ public class EsInt extends EsValue<Integer> {
       int result = value * right.unwrap();
       return new EsInt(result);
     }
+    if (other.isType(EsFloat.class)) {
+      EsFloat right = other.cast(EsFloat.class);
+      if (right == null) throw new EsScriptError("Nie można rzutować typu!");
+      double result = value * right.unwrap();
+      return new EsFloat(result);
+    }
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public <W, T extends EsValue<W>> @Nullable T cast(Class<T> to) {
+    return super.cast(to);
   }
 
   @Override

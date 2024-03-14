@@ -11,6 +11,7 @@ public final class EsTypes {
   public static final EsType STR = new SimpleEsType("tekst");
   public static final EsType VAR = new SimpleEsType("wartosc");
   public static final EsType UNIT = new SimpleEsType("jednostka");
+  public static final EsType FUNC = new SimpleEsType("funkcja");
 
   private EsTypes() {
 

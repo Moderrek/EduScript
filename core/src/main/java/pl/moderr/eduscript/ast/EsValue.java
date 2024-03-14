@@ -63,6 +63,23 @@ public abstract class EsValue<V> extends EsExpression {
     return null;
   }
 
+  public static <T extends EsValue> @NotNull T safeCast(@NotNull EsValue value, @NotNull Class<T> type) {
+    if (type == EsValue.class) return (T) value;
+    if (!value.getClass().equals(type)) {
+      EsValue casted = value.tryCast(type);
+      if (value == casted) throw new RuntimeException("TODO ZŁY TYP");
+      return (T) casted;
+    }
+    return (T) value;
+  }
+
+  public <T extends EsValue> EsValue tryCast(Class<T> to) {
+    if (to == EsStr.class) {
+      return new EsStr(this.asString());
+    }
+    return this;
+  }
+
   @Override
   public String toString() {
     return getType().getName() + "[" + asString() + "]";

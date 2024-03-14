@@ -2,9 +2,13 @@ package pl.moderr.eduscript.vm;
 
 import org.jetbrains.annotations.NotNull;
 import pl.moderr.eduscript.ast.EsExpression;
+import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.lexer.EsLexer;
 import pl.moderr.eduscript.lexer.EsTokenCollection;
 import pl.moderr.eduscript.parser.EsParser;
+import pl.moderr.eduscript.types.EsFunctionRef;
+import pl.moderr.eduscript.types.EsStr;
+import pl.moderr.eduscript.types.EsUnit;
 
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +30,17 @@ public class EsInstance {
     this.scripts = new ConcurrentHashMap<>();
     this.global = new EduScriptData();
     global.setVariable("pi", Math.PI);
+    global.setVariable("wypisz", new EsFunctionRef(new EsFunction() {
+      @Override
+      protected EsValue invoke() {
+        for (int i = 0; i < args().length; i += 1) {
+          EsValue val = (EsValue) arg(i, EsStr.class).get();
+          instance().out.accept(val.asString());
+        }
+        instance().out.accept("\n");
+        return EsUnit.get();
+      }
+    }));
   }
 
   public static @NotNull EsInstance create() {

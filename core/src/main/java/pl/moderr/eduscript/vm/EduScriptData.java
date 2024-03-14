@@ -2,10 +2,7 @@ package pl.moderr.eduscript.vm;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pl.moderr.eduscript.types.EsBool;
-import pl.moderr.eduscript.types.EsFloat;
-import pl.moderr.eduscript.types.EsInt;
-import pl.moderr.eduscript.types.EsStr;
+import pl.moderr.eduscript.types.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -33,6 +30,10 @@ public class EduScriptData {
 
   public void setVariable(@NotNull String identifier, int value) {
     setVariable(identifier, EsVariable.Mutable(identifier, new EsInt(value)));
+  }
+
+  public void setVariable(@NotNull String identifier, @NotNull EsFunctionRef funcRef) {
+    setVariable(identifier, EsVariable.Const(identifier, funcRef));
   }
 
   public void setVariable(@NotNull String identifier, @Nullable EsVariable value) {
