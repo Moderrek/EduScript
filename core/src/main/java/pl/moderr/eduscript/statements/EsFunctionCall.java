@@ -34,7 +34,9 @@ public class EsFunctionCall extends EsExpression {
     if (!var.get().isType(EsFunctionRef.class))
       throw new EsRuntimeError(ident.start(), "Wartość '" + ident.value() + "' nie jest funkcją!");
     EsFunction func = (EsFunction) var.get().unwrap();
-    func.evaluate(script, args.toArray(new EsExpression[args.size()]));
-    return EsUnit.get();
+    EsValue<?> returned = func.evaluate(script, args.toArray(new EsExpression[args.size()]));
+    if (returned == null)
+      return EsUnit.get();
+    return returned;
   }
 }

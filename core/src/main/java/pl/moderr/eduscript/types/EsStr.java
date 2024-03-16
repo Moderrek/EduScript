@@ -17,8 +17,8 @@ public class EsStr extends EsValue<String> {
   }
 
   @Override
-  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
-    return new EsStr(value + other.asString());
+  public String asString() {
+    return value;
   }
 
   @Override
@@ -27,13 +27,13 @@ public class EsStr extends EsValue<String> {
   }
 
   @Override
-  public EsType getType() {
-    return EsTypes.STR;
+  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
+    return new EsStr(value + other.asString());
   }
 
   @Override
-  public String asString() {
-    return value;
+  public EsType getType() {
+    return EsTypes.STR;
   }
 
 }

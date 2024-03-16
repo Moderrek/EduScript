@@ -27,10 +27,21 @@ public abstract class EsValue<V> extends EsExpression {
     return new EsUnit();
   }
 
-  public abstract V unwrap();
+  public static <T extends EsValue> @NotNull T safeCast(@NotNull EsValue value, @NotNull Class<T> type) {
+    if (type == EsValue.class) return (T) value;
+    if (!value.getClass().equals(type)) {
+      EsValue casted = value.tryCast(type);
+      if (value == casted) throw new RuntimeException("TODO ZŁY TYP");
+      return (T) casted;
+    }
+    return (T) value;
+  }
 
-  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
-    throw new UnsupportedOperationException();
+  public <T extends EsValue> EsValue tryCast(Class<T> to) {
+    if (to == EsStr.class) {
+      return new EsStr(this.asString());
+    }
+    return this;
   }
 //  public static <T extends EsValue<?>> @NotNull T Cast(@NotNull EsValue<?> value, @NotNull Class<T> type) {
 //    T casted = value.cast(type);
@@ -46,6 +57,14 @@ public abstract class EsValue<V> extends EsExpression {
 //    return casted != null;
 
 //  }
+
+  public abstract String asString();
+
+  public abstract V unwrap();
+
+  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
+    throw new UnsupportedOperationException();
+  }
 
   public @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> right) {
     throw new UnsupportedOperationException();
@@ -63,31 +82,12 @@ public abstract class EsValue<V> extends EsExpression {
     return null;
   }
 
-  public static <T extends EsValue> @NotNull T safeCast(@NotNull EsValue value, @NotNull Class<T> type) {
-    if (type == EsValue.class) return (T) value;
-    if (!value.getClass().equals(type)) {
-      EsValue casted = value.tryCast(type);
-      if (value == casted) throw new RuntimeException("TODO ZŁY TYP");
-      return (T) casted;
-    }
-    return (T) value;
-  }
-
-  public <T extends EsValue> EsValue tryCast(Class<T> to) {
-    if (to == EsStr.class) {
-      return new EsStr(this.asString());
-    }
-    return this;
-  }
-
   @Override
   public String toString() {
     return getType().getName() + "[" + asString() + "]";
   }
 
   public abstract EsType getType();
-
-  public abstract String asString();
 
   @Override
   public EsValue<?> evaluate(@NotNull EsScript script) {

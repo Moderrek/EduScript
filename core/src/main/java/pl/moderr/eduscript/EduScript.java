@@ -8,6 +8,8 @@ import pl.moderr.eduscript.parser.EsParser;
 
 public final class EduScript {
 
+  public static @NotNull String VERSION = "PRE-0.5";
+
   private EduScript() {
 
   }

@@ -14,6 +14,11 @@ public class EsFunctionRef extends EsValue<EsFunction> {
   }
 
   @Override
+  public String asString() {
+    return "funkcja";
+  }
+
+  @Override
   public EsFunction unwrap() {
     return func;
   }
@@ -21,11 +26,6 @@ public class EsFunctionRef extends EsValue<EsFunction> {
   @Override
   public EsType getType() {
     return EsTypes.FUNC;
-  }
-
-  @Override
-  public String asString() {
-    return "funkcja";
   }
 
 }

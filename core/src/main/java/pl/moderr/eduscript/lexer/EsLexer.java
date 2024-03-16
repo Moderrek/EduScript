@@ -89,13 +89,18 @@ public class EsLexer implements LexerMixinUtils {
         EsPosition start = position.clone();
         boolean isDecimal = false;
 
-        while (!end() && digit().get()) {
+        while (!end() && (digit().get() || symbol().get() == '.')) {
           char digit = symbolNext().get();
+          if (digit == '.') {
+            if (isDecimal)
+              throw new EsSyntaxError(start, "Nie można rozpoznać liczby");
+            isDecimal = true;
+          }
           buffer.append(digit);
         }
 
         String number = buffer.toString();
-        EsToken token = EsToken.integer(number, start, position.clone());
+        EsToken token = isDecimal ? new EsToken(DECIMAL, number, start, position.clone()) : EsToken.integer(number, start, position.clone());
 
         tokens.add(token);
         continue;

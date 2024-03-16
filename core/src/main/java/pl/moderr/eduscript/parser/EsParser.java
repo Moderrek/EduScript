@@ -64,6 +64,12 @@ public class EsParser extends EsParserBase {
       int integer = Integer.parseInt(literal);
       return EsValue.of(integer);
     }
+    // parse decimal
+    if (matchStay(DECIMAL)) {
+      EsToken literalDecimal = tokenNext().get();
+      double value = Double.parseDouble(literalDecimal.value());
+      return EsValue.of(value);
+    }
     // parse str
     if (matchStay(STRING)) {
       return EsValue.of(tokenNext().get().value());
@@ -72,6 +78,10 @@ public class EsParser extends EsParserBase {
     if (matchStay(TRUE) || matchStay(FALSE)) {
       EsTokenKind tokenKind = tokenNext().get().kind();
       return EsValue.of(tokenKind == TRUE);
+    }
+    // Function expression
+    if (match(IDENTIFIER, PAREN_LEFT)) {
+      return fnCall();
     }
     // parse variable
     if (matchStay(IDENTIFIER)) {
@@ -145,11 +155,15 @@ public class EsParser extends EsParserBase {
     EsToken name = lookTokenBack(2).get();
     ArrayList<EsExpression> args = new ArrayList<>();
     boolean haveArgs = false;
-    do {
+
+    while (!match(PAREN_RIGHT)) {
       haveArgs = true;
       args.add(expression());
-    } while (match(SEPARATOR_COMMA));
-    consume(PAREN_RIGHT);
+      if (!match(SEPARATOR_COMMA)) break;
+    }
+
+    if (haveArgs) consume(PAREN_RIGHT);
+
     return new EsFunctionCall(name, args);
   }
 

@@ -8,6 +8,7 @@ import pl.moderr.eduscript.lexer.EsTokenCollection;
 import pl.moderr.eduscript.parser.EsParser;
 import pl.moderr.eduscript.types.EsFunctionRef;
 import pl.moderr.eduscript.types.EsStr;
+import pl.moderr.eduscript.types.EsTypes;
 import pl.moderr.eduscript.types.EsUnit;
 
 import java.util.Map;
@@ -19,13 +20,16 @@ public class EsInstance {
 
   final EduScriptData global;
   final Map<EsScript, EduScriptData> scripts;
-  public Consumer<String> out;
-  public Consumer<String> debug;
+  public @NotNull Consumer<String> out;
+  public @NotNull Consumer<String> debug;
+  public @NotNull Consumer<EsValue<?>> statement;
   public boolean debugMode;
 
   public EsInstance() {
     this.out = System.out::print;
     this.debug = System.out::println;
+    this.statement = value -> {
+    };
     this.debugMode = false;
     this.scripts = new ConcurrentHashMap<>();
     this.global = new EduScriptData();
@@ -39,6 +43,14 @@ public class EsInstance {
         }
         instance().out.accept("\n");
         return EsUnit.get();
+      }
+    }));
+    global.setVariable("typ", new EsFunctionRef(new EsFunction() {
+      @Override
+      protected EsValue invoke() {
+        assertArgs(1);
+        EsValue val = (EsValue) arg(0, EsValue.class).get();
+        return EsValue.of(val.getType().getName());
       }
     }));
   }
@@ -71,7 +83,10 @@ public class EsInstance {
     }
     // Run
     for (EsExpression stmt : statements) {
-      stmt.evaluate(script);
+      EsValue<?> value = stmt.evaluate(script);
+      if (value != null && value.getType() != EsTypes.UNIT) {
+        statement.accept(value);
+      }
     }
     return script;
   }
@@ -91,7 +106,10 @@ public class EsInstance {
     // Run
     EsScript script = createScript();
     for (EsExpression stmt : statements) {
-      stmt.evaluate(script);
+      EsValue<?> value = stmt.evaluate(script);
+      if (value != null && value.getType() != EsTypes.UNIT) {
+        statement.accept(value);
+      }
     }
     return script;
   }

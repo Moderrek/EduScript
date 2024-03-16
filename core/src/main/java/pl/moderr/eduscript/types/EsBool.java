@@ -16,6 +16,11 @@ public class EsBool extends EsValue<Boolean> {
   }
 
   @Override
+  public String asString() {
+    return value ? "tak" : "nie";
+  }
+
+  @Override
   public Boolean unwrap() {
     return value;
   }
@@ -23,11 +28,6 @@ public class EsBool extends EsValue<Boolean> {
   @Override
   public EsType getType() {
     return EsTypes.BOOL;
-  }
-
-  @Override
-  public String asString() {
-    return value ? "tak" : "nie";
   }
 
 }

@@ -18,6 +18,16 @@ public class EsFloat extends EsValue<Double> {
   }
 
   @Override
+  public String asString() {
+    return String.valueOf(value);
+  }
+
+  @Override
+  public Double unwrap() {
+    return value;
+  }
+
+  @Override
   public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
     if (other.isType(EsInt.class)) {
       EsInt right = other.cast(EsInt.class);
@@ -52,18 +62,8 @@ public class EsFloat extends EsValue<Double> {
   }
 
   @Override
-  public Double unwrap() {
-    return value;
-  }
-
-  @Override
   public EsType getType() {
     return EsTypes.FLOAT;
-  }
-
-  @Override
-  public String asString() {
-    return String.valueOf(value);
   }
 
 }

@@ -13,6 +13,11 @@ public class EsUnit extends EsValue<Void> {
   }
 
   @Override
+  public String asString() {
+    return "nic";
+  }
+
+  @Override
   public Void unwrap() {
     return null;
   }
@@ -20,11 +25,6 @@ public class EsUnit extends EsValue<Void> {
   @Override
   public EsType getType() {
     return EsTypes.UNIT;
-  }
-
-  @Override
-  public String asString() {
-    return "nic";
   }
 
 }

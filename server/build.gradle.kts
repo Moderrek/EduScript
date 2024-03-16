@@ -47,7 +47,7 @@ tasks.withType<JavaCompile> {
 }
 tasks {
     named<ShadowJar>("shadowJar") {
-        archiveBaseName.set("shadow")
+        archiveBaseName.set("eduscript-server")
         mergeServiceFiles()
         manifest {
             attributes(mapOf("Main-Class" to "pl.moderr.eduscript.server.App"))

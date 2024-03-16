@@ -18,6 +18,11 @@ public class EsVar extends EsValue<String> {
   }
 
   @Override
+  public String asString() {
+    return identifier;
+  }
+
+  @Override
   public String unwrap() {
     return identifier;
   }
@@ -25,11 +30,6 @@ public class EsVar extends EsValue<String> {
   @Override
   public EsType getType() {
     return EsTypes.VAR;
-  }
-
-  @Override
-  public String asString() {
-    return identifier;
   }
 
   @Override

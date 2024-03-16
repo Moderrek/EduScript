@@ -1,6 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 repositories {
@@ -13,7 +16,7 @@ dependencies {
 
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
-    implementation("org.jetbrains:annotations:16.0.2")
+    implementation("org.jetbrains:annotations:24.1.0")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
@@ -40,4 +43,19 @@ tasks.named<Test>("test") {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+}
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("eduscript")
+        mergeServiceFiles()
+        manifest {
+            attributes(mapOf("Main-Class" to "pl.moderr.eduscript.app.App"))
+        }
+    }
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
 }

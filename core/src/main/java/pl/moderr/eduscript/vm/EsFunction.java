@@ -29,14 +29,6 @@ public abstract class EsFunction<R extends EsValue> {
     this.definedAt = definedAt;
   }
 
-  protected abstract R invoke();
-
-  protected EsRuntimeError createError(String message) {
-    if (definedAt != null)
-      return new EsRuntimeError(definedAt, message);
-    return new EsRuntimeError(message);
-  }
-
   public R evaluate(@NotNull EsScript script, @NotNull EsExpression[] args) {
     this.script = script;
     this.args = args;
@@ -45,16 +37,10 @@ public abstract class EsFunction<R extends EsValue> {
     return invoke();
   }
 
-  protected @NotNull EsExpression[] args() {
-    return this.args;
-  }
+  protected abstract R invoke();
 
   protected @NotNull EsInstance instance() {
     return this.script.getEsInstance();
-  }
-
-  protected @NotNull EsScript script() {
-    return this.script;
   }
 
   protected void assertArgs(int argCount) {
@@ -65,6 +51,12 @@ public abstract class EsFunction<R extends EsValue> {
       throw createError(MessageFormat.format("Spodziewano się {1} argumentów, otrzymano {2}", argCount, givenArguments));
     if (givenArguments > argCount)
       throw createError(MessageFormat.format("Spodziewano się {1} argumentów, otrzymano {2}", argCount, givenArguments));
+  }
+
+  protected EsRuntimeError createError(String message) {
+    if (definedAt != null)
+      return new EsRuntimeError(definedAt, message);
+    return new EsRuntimeError(message);
   }
 
   protected void assertArgType(int index, EsType expected) throws Exception {
@@ -92,6 +84,14 @@ public abstract class EsFunction<R extends EsValue> {
     value = EsValue.safeCast(value.evaluate(script()), type);
     evaluatedArgs.put(expression, value);
     return Optional.of((T) value);
+  }
+
+  protected @NotNull EsExpression[] args() {
+    return this.args;
+  }
+
+  protected @NotNull EsScript script() {
+    return this.script;
   }
 
 }

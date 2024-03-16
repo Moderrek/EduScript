@@ -32,16 +32,16 @@ public class EduScriptData {
     setVariable(identifier, EsVariable.Mutable(identifier, new EsInt(value)));
   }
 
-  public void setVariable(@NotNull String identifier, @NotNull EsFunctionRef funcRef) {
-    setVariable(identifier, EsVariable.Const(identifier, funcRef));
-  }
-
   public void setVariable(@NotNull String identifier, @Nullable EsVariable value) {
     if (value == null) {
       variables.remove(identifier);
       return;
     }
     variables.put(identifier, value);
+  }
+
+  public void setVariable(@NotNull String identifier, @NotNull EsFunctionRef funcRef) {
+    setVariable(identifier, EsVariable.Const(identifier, funcRef));
   }
 
   public void setVariable(@NotNull String identifier, String value) {

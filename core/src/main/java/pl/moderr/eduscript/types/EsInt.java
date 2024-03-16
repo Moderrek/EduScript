@@ -19,6 +19,11 @@ public class EsInt extends EsValue<Integer> {
   }
 
   @Override
+  public String asString() {
+    return String.valueOf(value);
+  }
+
+  @Override
   public Integer unwrap() {
     return value;
   }
@@ -65,10 +70,5 @@ public class EsInt extends EsValue<Integer> {
   @Override
   public EsType getType() {
     return EsTypes.INT;
-  }
-
-  @Override
-  public String asString() {
-    return String.valueOf(value);
   }
 }

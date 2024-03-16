@@ -35,10 +35,6 @@ public class EsScript {
     return data().getVariables().keySet();
   }
 
-  public EsInstance getEsInstance() {
-    return instance;
-  }
-
   public boolean hasDefinedVariable(@NotNull String identifier) {
     return data().getVariable(identifier).isPresent();
   }
@@ -47,6 +43,10 @@ public class EsScript {
     Optional<EsVariable> local = data().getVariable(identifier);
     if (local.isPresent()) return local;
     return getEsInstance().global.getVariable(identifier);
+  }
+
+  public EsInstance getEsInstance() {
+    return instance;
   }
 
   public @Nullable Object rawValue(@NotNull String identifier) {
