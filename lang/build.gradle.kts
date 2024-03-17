@@ -3,6 +3,8 @@ plugins {
     `java-library`
 }
 
+version = "PRE-0.5"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -11,7 +13,7 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
-    implementation("org.jetbrains:annotations:16.0.2")
+    implementation("org.jetbrains:annotations:24.1.0")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
@@ -32,4 +34,8 @@ tasks.named<Test>("test") {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+}
+
+tasks.withType<Jar> {
+    archiveBaseName = "EduScript"
 }

@@ -4,6 +4,6 @@ plugins {
 }
 
 rootProject.name = "EduScript"
-include("core")
+include("lang")
 include("app")
 include("server")

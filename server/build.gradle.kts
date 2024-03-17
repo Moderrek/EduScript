@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":lang"))
     implementation("org.java-websocket:Java-WebSocket:1.5.4")
 
     // Use JUnit Jupiter for testing.
@@ -45,6 +45,7 @@ tasks.named<Test>("test") {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
+
 tasks {
     named<ShadowJar>("shadowJar") {
         archiveBaseName.set("eduscript-server")

@@ -6,13 +6,15 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
+version = "PRE-0.5"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":lang"))
 
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
@@ -44,6 +46,7 @@ tasks.named<Test>("test") {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
+
 tasks {
     named<ShadowJar>("shadowJar") {
         archiveBaseName.set("eduscript")
