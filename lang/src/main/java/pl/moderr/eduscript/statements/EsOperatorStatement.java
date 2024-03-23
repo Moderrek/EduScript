@@ -6,8 +6,8 @@ import pl.moderr.eduscript.ast.EsValue;
 import pl.moderr.eduscript.lexer.EsTokenKind;
 import pl.moderr.eduscript.vm.EsScript;
 
-import static pl.moderr.eduscript.lexer.EsTokenKinds.MULTIPLY;
-import static pl.moderr.eduscript.lexer.EsTokenKinds.PLUS;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class EsOperatorStatement extends EsExpression {
 
@@ -26,14 +26,19 @@ public class EsOperatorStatement extends EsExpression {
     EsValue<?> left = expr_left.evaluate(script);
     EsValue<?> right = expr_right.evaluate(script);
 
-    if (operator == PLUS) {
-      return left.operatorPlus(right);
-    }
-    if (operator == MULTIPLY) {
-      return left.operatorMultiply(right);
+    String operatorMethodName = "operator" + operator.getName();
+    Method operatorMethod;
+    try {
+      operatorMethod = left.getClass().getMethod(operatorMethodName, EsValue.class);
+      try {
+        return (EsValue<?>) operatorMethod.invoke(left, right);
+      } catch (IllegalAccessException | InvocationTargetException e) {
+        throw new RuntimeException(e);
+      }
+    } catch (NoSuchMethodException ignored) {
     }
 
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException("Nie zdefiniowana operacja " + operator);
   }
 
 }

@@ -27,13 +27,18 @@ public class EsStr extends EsValue<String> {
   }
 
   @Override
-  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
+  public EsType getType() {
+    return EsTypes.STR;
+  }
+
+  public @NotNull EsValue<?> operatorplus(@NotNull EsValue<?> other) {
     return new EsStr(value + other.asString());
   }
 
-  @Override
-  public EsType getType() {
-    return EsTypes.STR;
+  public @NotNull EsValue<?> operatormultiply(@NotNull EsValue<?> other) {
+    EsInt right = other.cast(EsInt.class);
+    assert right != null;
+    return new EsStr(value.repeat(right.unwrap()));
   }
 
 }

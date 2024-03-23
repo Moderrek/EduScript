@@ -28,7 +28,11 @@ public class EsFloat extends EsValue<Double> {
   }
 
   @Override
-  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
+  public EsType getType() {
+    return EsTypes.FLOAT;
+  }
+
+  public @NotNull EsValue<?> operatorplus(@NotNull EsValue<?> other) {
     if (other.isType(EsInt.class)) {
       EsInt right = other.cast(EsInt.class);
       if (right == null) throw new EsScriptError("Nie można rzutować typu!");
@@ -44,8 +48,7 @@ public class EsFloat extends EsValue<Double> {
     throw new UnsupportedOperationException();
   }
 
-  @Override
-  public @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> other) {
+  public @NotNull EsValue<?> operatormultiply(@NotNull EsValue<?> other) {
     if (other.isType(EsInt.class)) {
       EsValue<Integer> right = other.cast(EsInt.class);
       if (right == null) throw new EsScriptError("Nie można rzutować typu!");
@@ -59,11 +62,6 @@ public class EsFloat extends EsValue<Double> {
       return new EsFloat(result);
     }
     throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public EsType getType() {
-    return EsTypes.FLOAT;
   }
 
 }

@@ -62,14 +62,6 @@ public abstract class EsValue<V> extends EsExpression {
 
   public abstract V unwrap();
 
-  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
-    throw new UnsupportedOperationException();
-  }
-
-  public @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> right) {
-    throw new UnsupportedOperationException();
-  }
-
   public <T extends EsValue> boolean isType(@NotNull Class<T> type) {
     if (type == EsValue.class) return true;
     if (getClass().equals(type)) return true;

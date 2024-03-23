@@ -29,7 +29,16 @@ public class EsInt extends EsValue<Integer> {
   }
 
   @Override
-  public @NotNull EsValue<?> operatorPlus(@NotNull EsValue<?> other) {
+  public <W, T extends EsValue<W>> @Nullable T cast(Class<T> to) {
+    return super.cast(to);
+  }
+
+  @Override
+  public EsType getType() {
+    return EsTypes.INT;
+  }
+
+  public @NotNull EsValue<?> operatorplus(@NotNull EsValue<?> other) {
     if (other.isType(EsInt.class)) {
       EsValue<Integer> right = other.cast(EsInt.class);
       if (right == null) throw new EsScriptError("Nie można rzutować typu!");
@@ -45,8 +54,7 @@ public class EsInt extends EsValue<Integer> {
     throw new UnsupportedOperationException();
   }
 
-  @Override
-  public @NotNull EsValue<?> operatorMultiply(@NotNull EsValue<?> other) {
+  public @NotNull EsValue<?> operatormultiply(@NotNull EsValue<?> other) {
     if (other.isType(EsInt.class)) {
       EsValue<Integer> right = other.cast(EsInt.class);
       if (right == null) throw new EsScriptError("Nie można rzutować typu!");
@@ -60,15 +68,5 @@ public class EsInt extends EsValue<Integer> {
       return new EsFloat(result);
     }
     throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public <W, T extends EsValue<W>> @Nullable T cast(Class<T> to) {
-    return super.cast(to);
-  }
-
-  @Override
-  public EsType getType() {
-    return EsTypes.INT;
   }
 }
