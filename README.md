@@ -1,13 +1,15 @@
 <div align="center">
     <h1>🌎 EduScript</h1>
 
-[Playground](http://play.eduscript.pl)
-[Learn](http://nauka.eduscript.pl)
-[Download](http://play.eduscript.pl)
+[//]:[Playground](http://play.eduscript.pl)
+[//]:[Learn](http://nauka.eduscript.pl)
+[//]:[Download](http://play.eduscript.pl)
 
 </div>
 
-EduScript is not production language!  
+> [!WARNING]
+> The project is designed for my personal needs only, and may not be suitable for everybody. The language should not be used in real world projects. It's completely Open Source, fork it and adapt it to your needs.
+
 The language is intended to help you learn programming in Polish.
 
 ## Features
@@ -25,8 +27,11 @@ The language is intended to help you learn programming in Polish.
 
 ### EduScript
 
+* `stala` = `const`
 * `zmien` = `var`
 * `wypisz` = `print`
+* *promien* means *radius*
+* *pole* means *area*
 
 ```es
 zmien promien = 5;
